@@ -1,0 +1,67 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "defaultTags": {
+            "value": {
+                "env": "test",
+                "project": "memesfinder"
+            }
+        },
+        "cognitiveservices": {
+            "value": {
+                "name": "cswetestmemesfinder",
+                "sku": {
+                    "name": "S0"
+                }
+            }
+        },
+        "loganalyticsworkspace": {
+            "value": {
+                "name": "lawetestmemesfinder"
+            }
+        },
+        "appinsights": {
+            "value": {
+                "name": "aiwetestmemesfinder"
+            }
+        },
+        "keyvault": {
+            "value": {
+                "name": "kvwetestmemesfinder",
+                "adminuserobjectid": "c9a65d52-474f-47da-bd2c-b28a9663ae6e"
+            }
+        },
+        "servicebus": {
+            "value": {
+                "name": "sbwetestmemesfinder"
+            }
+        },
+        "storageaccount": {
+            "value": {
+                "name": "sawetestmemesfinder"
+            }
+        },
+        "appserviceplan_gateway": {
+            "value": {
+                "name": "aspwetestmemesfindergateway",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
+        "functionapp_gateway": {
+            "value": {
+                "name": "fawetestmemesfindergateway",
+                "environment": "Test"
+            }
+        },
+        "fasb_senderrole_guid": {
+            "value": "98380f24-6263-4055-8af2-18ab7b5edd88"
+        }
+    }
+}

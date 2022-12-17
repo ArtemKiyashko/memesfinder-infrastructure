@@ -1,0 +1,67 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "defaultTags": {
+            "value": {
+                "env": "prod",
+                "project": "memesfinder"
+            }
+        },
+        "cognitiveservices": {
+            "value": {
+                "name": "csweprivatememesfinder",
+                "sku": {
+                    "name": "S0"
+                }
+            }
+        },
+        "loganalyticsworkspace": {
+            "value": {
+                "name": "laweprivatememesfinder"
+            }
+        },
+        "appinsights": {
+            "value": {
+                "name": "aiweprivatememesfinder"
+            }
+        },
+        "keyvault": {
+            "value": {
+                "name": "kvweprivatememesfinder",
+                "adminuserobjectid": "c9a65d52-474f-47da-bd2c-b28a9663ae6e"
+            }
+        },
+        "servicebus": {
+            "value": {
+                "name": "sbweprivatememesfinder"
+            }
+        },
+        "storageaccount": {
+            "value": {
+                "name": "saweprivatememesfinder"
+            }
+        },
+        "appserviceplan_gateway": {
+            "value": {
+                "name": "aspweprivatememesfindergateway",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
+        "functionapp_gateway": {
+            "value": {
+                "name": "faweprivatememesfindergateway",
+                "environment": "Production"
+            }
+        },
+        "fasb_senderrole_guid": {
+            "value": "75ebc6ab-21fa-4ffc-94df-45839a0e6616"
+        }
+    }
+}
