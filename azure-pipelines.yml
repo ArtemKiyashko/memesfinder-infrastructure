@@ -1,0 +1,44 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Test
+  jobs:
+   - job:
+     steps:
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploye resource group
+        inputs:
+          deploymentScope: 'Resource Group'
+          azureResourceManagerConnection: 'Azure Vostok (60447d26-d388-4a2b-a8cd-45114f7099a8)'
+          subscriptionId: '60447d26-d388-4a2b-a8cd-45114f7099a8'
+          action: 'Create Or Update Resource Group'
+          resourceGroupName: 'testgroup'
+          location: 'West Europe'
+          templateLocation: 'Linked artifact'
+          csmFile: 'template.json'
+          csmParametersFile: 'envs/test/parameters.json'
+          deploymentMode: 'Incremental'
+- stage: Production
+  dependsOn: Test
+  condition: succeeded('Test')
+  jobs:
+   - job:
+     steps:
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploye resource group
+        inputs:
+          deploymentScope: 'Resource Group'
+          azureResourceManagerConnection: 'Azure Vostok (60447d26-d388-4a2b-a8cd-45114f7099a8)'
+          subscriptionId: '60447d26-d388-4a2b-a8cd-45114f7099a8'
+          action: 'Create Or Update Resource Group'
+          resourceGroupName: 'rsgweprivatememesfinder'
+          location: 'West Europe'
+          templateLocation: 'Linked artifact'
+          csmFile: 'template.json'
+          csmParametersFile: 'envs/prod/parameters.json'
+          deploymentMode: 'Incremental'
+
