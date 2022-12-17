@@ -7,10 +7,10 @@ pool:
 stages:
 - stage: Test
   jobs:
-   - job:
+   - job: Deploy
      steps:
       - task: AzureResourceManagerTemplateDeployment@3
-        displayName: Deploye resource group
+        displayName: Deploy resource group
         inputs:
           deploymentScope: 'Resource Group'
           azureResourceManagerConnection: 'Azure Vostok (60447d26-d388-4a2b-a8cd-45114f7099a8)'
@@ -26,10 +26,10 @@ stages:
   dependsOn: Test
   condition: succeeded('Test')
   jobs:
-   - job:
+   - job: Deploy
      steps:
       - task: AzureResourceManagerTemplateDeployment@3
-        displayName: Deploye resource group
+        displayName: Deploy resource group
         inputs:
           deploymentScope: 'Resource Group'
           azureResourceManagerConnection: 'Azure Vostok (60447d26-d388-4a2b-a8cd-45114f7099a8)'
