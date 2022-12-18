@@ -86,6 +86,9 @@
         },
         "txtxprocsb_readerrole_guid": {
             "value": "9b60eb8e-c09b-4388-b654-fb18be43c943"
+        },
+        "txtxproccs_readerrole_guid": {
+            "value": "7a9a7675-518f-411c-bcac-8e11864d4cb6"
         }
     }
 }
