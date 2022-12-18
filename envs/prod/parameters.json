@@ -54,14 +54,38 @@
                 }
             }
         },
+        "appserviceplan_textprocessor": {
+            "value": {
+                "name": "aspweprivatememesfindertxtproc",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "functionapp_gateway": {
             "value": {
                 "name": "faweprivatememesfindergateway",
                 "environment": "Production"
             }
         },
+        "functionapp_textprocessor": {
+            "value": {
+                "name": "faweprivatememesfindertxtproc",
+                "environment": "Production"
+            }
+        },
         "fasb_senderrole_guid": {
             "value": "75ebc6ab-21fa-4ffc-94df-45839a0e6616"
+        },
+        "txtxprocsb_senderrole_guid": {
+            "value": "39f41a7e-f92a-4641-a5c3-d9fbce2261a7"
+        },
+        "txtxprocsb_readerrole_guid": {
+            "value": "82ba366d-0c96-4514-a94d-af787bedd14d"
         }
     }
 }

@@ -54,14 +54,38 @@
                 }
             }
         },
+        "appserviceplan_textprocessor": {
+            "value": {
+                "name": "aspwetestmemesfindertxtproc",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "functionapp_gateway": {
             "value": {
                 "name": "fawetestmemesfindergateway",
                 "environment": "Test"
             }
         },
+        "functionapp_textprocessor": {
+            "value": {
+                "name": "fawetestmemesfindertxtproc",
+                "environment": "Production"
+            }
+        },
         "fasb_senderrole_guid": {
             "value": "98380f24-6263-4055-8af2-18ab7b5edd88"
+        },
+        "txtxprocsb_senderrole_guid": {
+            "value": "87520b6a-f519-45c4-a13f-43ccafe58f80"
+        },
+        "txtxprocsb_readerrole_guid": {
+            "value": "9b60eb8e-c09b-4388-b654-fb18be43c943"
         }
     }
 }

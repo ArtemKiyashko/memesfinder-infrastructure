@@ -35,11 +35,24 @@
             "metadata": {
                 "description": "A new GUID used to identify the role assignment"
             }
+        },
+        "functionapp_textprocessor": {
+            "type": "object"
+        },
+        "appserviceplan_textprocessor": {
+            "type": "object"
+        },
+        "txtxprocsb_senderrole_guid": {
+            "type": "string"
+        },
+        "txtxprocsb_readerrole_guid": {
+            "type": "string"
         }
     },
     "variables": {
         "rsgLocation": "[resourceGroup().location]",
-        "servicebus_sender_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39')]"
+        "servicebus_sender_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39')]",
+        "servicebus_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0')]"
     },
     "resources": [
         {
@@ -602,6 +615,27 @@
             }
         },
         {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('appserviceplan_textprocessor').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('appserviceplan_textprocessor').sku]",
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_gateway').name]",
@@ -702,6 +736,102 @@
             }
         },
         {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('functionapp_textprocessor').name]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_textprocessor').name)]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
+                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+            ],
+            "tags": "[parameters('defaultTags')]",
+            "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_textprocessor').name)]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": true,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0,
+                    "netFrameworkVersion": "v6.0",
+                    "ftpsState": "Disabled",
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
+                        },
+                        {
+                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                            "value": "[parameters('functionapp_textprocessor').environment]"
+                        },
+                        {
+                            "name": "ServiceBusOptions__KeywordMessagesTopic",
+                            "value": "keywordmessages"
+                        },
+                        {
+                            "name": "ServiceBusOptions__FullyQualifiedNamespace",
+                            "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(parameters('functionapp_textprocessor').name)]"
+                        },
+                        {
+                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                            "value": "true"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
             "name": "[parameters('fasb_senderrole_guid')]",
@@ -713,6 +843,34 @@
             "properties": {
                 "roleDefinitionId": "[variables('servicebus_sender_role')]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_gateway').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[parameters('txtxprocsb_senderrole_guid')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/keywordmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_textprocessor').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_sender_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_textprocessor').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[parameters('txtxprocsb_readerrole_guid')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_textprocessor').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_reader_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_textprocessor').name), '2022-03-01', 'Full').identity.principalId]"
             }
         }
     ]
