@@ -66,6 +66,18 @@
                 }
             }
         },
+        "appserviceplan_memeprocessor": {
+            "value": {
+                "name": "aspweprivatememesfindermemproc",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "functionapp_gateway": {
             "value": {
                 "name": "faweprivatememesfindergateway",
@@ -76,6 +88,13 @@
             "value": {
                 "name": "faweprivatememesfindertxtproc",
                 "environment": "Production"
+            }
+        },
+        "functionapp_memeprocessor": {
+            "value": {
+                "name": "faweprivatememesfindermemproc",
+                "environment": "Production",
+                "bottoken_kvsecretname": "TelegramBotOptions--Token"
             }
         },
         "fasb_senderrole_guid": {
@@ -89,6 +108,9 @@
         },
         "txtxproccs_readerrole_guid": {
             "value": "dad5a70e-a86a-4c6a-b066-9d5aa39b74d3"
+        },
+        "memprocsb_readerrole_guid": {
+            "value": "62b35d83-594c-4d97-b049-8ff49f86148f"
         }
     }
 }

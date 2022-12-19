@@ -50,6 +50,15 @@
         },
         "txtxproccs_readerrole_guid": {
             "type": "string"
+        },
+        "appserviceplan_memeprocessor": {
+            "type": "object"
+        },
+        "functionapp_memeprocessor": {
+            "type": "object"
+        },
+        "memprocsb_readerrole_guid": {
+            "type": "string"
         }
     },
     "variables": {
@@ -463,19 +472,27 @@
             "name": "[concat(parameters('keyvault').name, '/add')]",
             "properties": {
                 "accessPolicies": [
-                {
-                    "objectId": "[parameters('keyvault').adminuserobjectid]",
-                    "permissions": {
-                        "certificates": [ "all" ],
-                        "keys": [ "all" ],
-                        "secrets": [ "all" ]
+                    {
+                        "objectId": "[parameters('keyvault').adminuserobjectid]",
+                        "permissions": {
+                            "certificates": [ "all" ],
+                            "keys": [ "all" ],
+                            "secrets": [ "all" ]
+                        },
+                        "tenantId": "[subscription().tenantId]"
                     },
-                    "tenantId": "[subscription().tenantId]"
-                }
+                    {
+                        "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name), '2022-03-01', 'Full').identity.principalId]",
+                        "permissions": {
+                            "secrets": [ "get" ]
+                        },
+                        "tenantId": "[subscription().tenantId]"
+                    }
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvault').name)]"
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvault').name)]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name)]"
             ]
         },
         {
@@ -562,6 +579,28 @@
             }
         },
         {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/keywordmessages/memeprocessor')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "isClientAffine": false,
+                "lockDuration": "PT30S",
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "deadLetteringOnFilterEvaluationExceptions": false,
+                "maxDeliveryCount": 10,
+                "status": "Active",
+                "enableBatchedOperations": true,
+                "autoDeleteOnIdle": "P14D"
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2022-05-01",
             "name": "[parameters('storageaccount').name]",
@@ -625,6 +664,27 @@
             "location": "[variables('rsgLocation')]",
             "tags": "[parameters('defaultTags')]",
             "sku": "[parameters('appserviceplan_textprocessor').sku]",
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('appserviceplan_memeprocessor').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('appserviceplan_memeprocessor').sku]",
             "kind": "functionapp",
             "properties": {
                 "perSiteScaling": false,
@@ -836,6 +896,102 @@
             }
         },
         {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('functionapp_memeprocessor').name]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_memeprocessor').name)]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
+                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+            ],
+            "tags": "[parameters('defaultTags')]",
+            "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_memeprocessor').name)]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": true,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0,
+                    "netFrameworkVersion": "v6.0",
+                    "ftpsState": "Disabled",
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
+                        },
+                        {
+                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                            "value": "[parameters('functionapp_memeprocessor').environment]"
+                        },
+                        {
+                            "name": "ServiceBusOptions__FullyQualifiedNamespace",
+                            "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
+                        },
+                        {
+                            "name": "TelegramBotOptions__Token",
+                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_memeprocessor').bottoken_kvsecretname,')')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(parameters('functionapp_memeprocessor').name)]"
+                        },
+                        {
+                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                            "value": "true"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
             "name": "[parameters('fasb_senderrole_guid')]",
@@ -889,6 +1045,20 @@
             "properties": {
                 "roleDefinitionId": "[variables('languageservices_reader_role')]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_textprocessor').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[parameters('memprocsb_readerrole_guid')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/keywordmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_reader_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name), '2022-03-01', 'Full').identity.principalId]"
             }
         }
     ]
