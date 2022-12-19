@@ -866,6 +866,14 @@
                             "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
                         },
                         {
+                            "name": "TextAnalyticsOptions__Url",
+                            "value": "[reference(parameters('cognitiveservices').name).endpoint]"
+                        },
+                        {
+                            "name": "TextAnalyticsOptions__Language",
+                            "value": "ru"
+                        },
+                        {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
                             "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
                         },
