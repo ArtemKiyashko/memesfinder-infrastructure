@@ -970,6 +970,14 @@
                             "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_memeprocessor').bottoken_kvsecretname,')')]"
                         },
                         {
+                            "name": "SearchEngineOptions__ApiKey",
+                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_memeprocessor').googlesearchengine_apikey_kvsecretname,')')]"
+                        },
+                        {
+                            "name": "SearchEngineOptions__EngineId",
+                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_memeprocessor').googlesearchengine_engineid_kvsecretname,')')]"
+                        },
+                        {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
                             "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
                         },
