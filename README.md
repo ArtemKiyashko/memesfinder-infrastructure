@@ -38,7 +38,7 @@ Azure Service Bus as event bus and message broker for communication between serv
 ### Data flow:
 
 ```mermaid
-flowchart LR;
+flowchart TD;
 
 A(TG HTTP IN);
 B(FA: Gateway);
