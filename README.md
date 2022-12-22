@@ -17,7 +17,7 @@ As a key phrase extractor we are using [Azure Text Analytics](https://azure.micr
 
 For picture search we are utilizing [Google Custom Search](https://developers.google.com/custom-search/v1/introduction) and it`s [.NET Client Library](https://developers.google.com/api-client-library/dotnet/apis/customsearch/v1)
 
-Communication with Telegram through [Telegra.Bot](https://github.com/TelegramBots/Telegram.Bot) library for .NET
+Communication with Telegram through [Telegram.Bot](https://github.com/TelegramBots/Telegram.Bot) library for .NET
 
 This project using only SaaS model of Azure resources (nothing for IaaS/PaaS or On-Premise)
 
