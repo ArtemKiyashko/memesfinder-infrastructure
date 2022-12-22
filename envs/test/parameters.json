@@ -96,7 +96,8 @@
                 "environment": "Test",
                 "bottoken_kvsecretname": "TelegramBotOptions--Token",
                 "googlesearchengine_apikey_kvsecretname": "SearchEngineOptions--ApiKey",
-                "googlesearchengine_engineid_kvsecretname": "SearchEngineOptions--EngineId"
+                "googlesearchengine_engineid_kvsecretname": "SearchEngineOptions--EngineId",
+                "googlesearchengine_countryrestriction": "countryRU"
             }
         },
         "fasb_senderrole_guid": {
