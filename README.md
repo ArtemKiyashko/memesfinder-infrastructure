@@ -1,6 +1,6 @@
 ## MemesFinderBot
 
-### CI\CD tatuses
+### CI\CD statuses
 Infrastructure: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/ArtemKiyashko.memesfinder-infrastructure?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=9&branchName=master)
 
 Gateway: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/ArtemKiyashko.memesfinder-gateway?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=8&branchName=master)
