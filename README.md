@@ -11,7 +11,7 @@ ProcessMeme: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinde
 
 ### Description
 
-This telegram bot is basically listening for the group messages, randomly chosing one of and replying with the picture, related to the one of the key phrase from the original message.
+This telegram bot is basically listening for the group messages, randomly choosing one of and replying with the picture, related to the one of the key phrase from the original message.
 
 As a key phrase extractor we are using [Azure Text Analytics](https://azure.microsoft.com/en-us/products/cognitive-services/text-analytics/#overview) service (part of Cognitive Services)
 
