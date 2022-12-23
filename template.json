@@ -759,7 +759,7 @@
                         },
                         {
                             "name": "RollDiceDecisionMakerOptions__RangeTop",
-                            "value": "3"
+                            "value": "[parameters('functionapp_gateway').rolldice_decision_top_bound]"
                         },
                         {
                             "name": "ServiceBusOptions__AllMessagesTopic",

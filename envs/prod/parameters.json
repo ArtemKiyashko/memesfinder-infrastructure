@@ -81,7 +81,8 @@
         "functionapp_gateway": {
             "value": {
                 "name": "faweprivatememesfindergateway",
-                "environment": "Production"
+                "environment": "Production",
+                "rolldice_decision_top_bound": 10
             }
         },
         "functionapp_textprocessor": {

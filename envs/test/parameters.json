@@ -81,7 +81,8 @@
         "functionapp_gateway": {
             "value": {
                 "name": "fawetestmemesfindergateway",
-                "environment": "Test"
+                "environment": "Test",
+                "rolldice_decision_top_bound": 3
             }
         },
         "functionapp_textprocessor": {
