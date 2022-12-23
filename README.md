@@ -51,8 +51,8 @@ Z(TG HTTP OUT)
 A -- Update --> B
 B -- Update --> C
 C -- Update --> D
-D -- UpdateWithKeyword --> E
-E -- UpdateWithKeyword --> F
+D -- MessageWithKeyword --> E
+E -- MessageWithKeyword --> F
 F -- PhotoMessage --> Z
 ```
 
@@ -60,7 +60,7 @@ Legend:
  - `FA` - Azure Function App
  - `SB` - ServiceBus topic
  - `Update` - incoming Telegram message from chat
- - `UpdateWithKeyword` - composite model including original Telegram message model and key phrase
+ - `MessageWithKeyword` - composite model including original Telegram message model and key phrase
 
 ### Resources to be created by this ARM template
 
