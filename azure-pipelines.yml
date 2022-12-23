@@ -30,7 +30,7 @@ stages:
           deploymentMode: 'Incremental'
 - stage: Production
   dependsOn: Test
-  condition: succeeded('Test')
+  condition: and(succeeded('Test'), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
    - job: Deploy
      steps:
