@@ -82,7 +82,7 @@
             "value": {
                 "name": "faweprivatememesfindergateway",
                 "environment": "Production",
-                "rolldice_decision_top_bound": 20
+                "rolldice_decision_top_bound": 30
             }
         },
         "functionapp_textprocessor": {
