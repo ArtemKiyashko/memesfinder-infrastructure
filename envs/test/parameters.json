@@ -82,7 +82,7 @@
             "value": {
                 "name": "fawetestmemesfindergateway",
                 "environment": "Test",
-                "rolldice_decision_top_bound": 10
+                "rolldice_decision_top_bound": 17
             }
         },
         "functionapp_textprocessor": {
