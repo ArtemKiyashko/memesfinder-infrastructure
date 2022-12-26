@@ -23,11 +23,11 @@ This project using only SaaS model of Azure resources (nothing for IaaS/PaaS or 
 
 ## Services repositories
 
-[Gateway](https://github.com/ArtemKiyashko/memesfinder-gateway) - receiving Telegram HTTP updates with messages from chat. This service takes the responsibility of taking the decision for processing particular message. If positive dicision taken - just forwarding message to ServiceBus topic
+[Gateway](https://github.com/KirillRukasov/memesfinder-gateway) - receiving Telegram HTTP updates with messages from chat. This service takes the responsibility of taking the decision for processing particular message. If positive dicision taken - just forwarding message to ServiceBus topic
 
-[TextProcessor](https://github.com/ArtemKiyashko/memesfinder-textprocessor) - finding key phrases in original message via Azure Congnitive Services
+[TextProcessor](https://github.com/KirillRukasov/memesfinder-textprocessor) - finding key phrases in original message via Azure Congnitive Services
 
-[ProcessMeme](https://github.com/ArtemKiyashko/memesfinder-processmeme) - finding proper picture based on the key phrase received from `TextProcessor`. If picture found - replying to original Telegram message with that picture.
+[ProcessMeme](https://github.com/KirillRukasov/memesfinder-processmeme) - finding proper picture based on the key phrase received from `TextProcessor`. If picture found - replying to original Telegram message with that picture.
 
 ## Architecture
 
