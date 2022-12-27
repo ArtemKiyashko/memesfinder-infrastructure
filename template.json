@@ -982,10 +982,6 @@
                             "value": "[parameters('functionapp_memeprocessor').googlesearchengine_countryrestriction]"
                         },
                         {
-                            "name": "SearchEngineOptions__SitesToExclude",
-                            "value": "[parameters('functionapp_memeprocessor').googlesearchengine_sitestoexclude]"
-                        },
-                        {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
                             "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
                         },
