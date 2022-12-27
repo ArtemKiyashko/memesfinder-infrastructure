@@ -487,12 +487,20 @@
                             "secrets": [ "get" ]
                         },
                         "tenantId": "[subscription().tenantId]"
+                    },
+                    {
+                        "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_gateway').name), '2022-03-01', 'Full').identity.principalId]",
+                        "permissions": {
+                            "secrets": [ "get" ]
+                        },
+                        "tenantId": "[subscription().tenantId]"
                     }
                 ]
             },
             "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvault').name)]",
-                "[resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name)]"
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name)]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_gateway').name)]"
             ]
         },
         {
@@ -760,6 +768,10 @@
                         {
                             "name": "RollDiceDecisionMakerOptions__RangeTop",
                             "value": "[parameters('functionapp_gateway').rolldice_decision_top_bound]"
+                        },
+                        {
+                            "name": "ChatWhitelistDecisionMakerOptions__AllowedChatIds",
+                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_gateway').chatswhitelist_kvsecretname,')')]"
                         },
                         {
                             "name": "ServiceBusOptions__AllMessagesTopic",

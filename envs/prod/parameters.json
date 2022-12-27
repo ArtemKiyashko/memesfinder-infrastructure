@@ -82,7 +82,8 @@
             "value": {
                 "name": "faweprivatememesfindergateway",
                 "environment": "Production",
-                "rolldice_decision_top_bound": 30
+                "rolldice_decision_top_bound": 30,
+                "chatswhitelist_kvsecretname": "ChatWhitelistDecisionMakerOptions--AllowedChatIds"
             }
         },
         "functionapp_textprocessor": {
