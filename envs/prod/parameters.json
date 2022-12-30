@@ -66,6 +66,18 @@
                 }
             }
         },
+        "appserviceplan_decisionmaker": {
+            "value": {
+                "name": "aspweprivatememesfinderdmaker",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "appserviceplan_memeprocessor": {
             "value": {
                 "name": "aspweprivatememesfindermemproc",
@@ -92,6 +104,12 @@
                 "environment": "Production"
             }
         },
+        "functionapp_decisionmaker": {
+            "value": {
+                "name": "faweprivatememesfinderdmaker",
+                "environment": "Production"
+            }
+        },
         "functionapp_memeprocessor": {
             "value": {
                 "name": "faweprivatememesfindermemproc",
@@ -109,7 +127,13 @@
             "value": "39f41a7e-f92a-4641-a5c3-d9fbce2261a7"
         },
         "txtxprocsb_readerrole_guid": {
-            "value": "82ba366d-0c96-4514-a94d-af787bedd14d"
+            "value": "96dc133e-c1f3-4776-bcc6-b80720d7f545"
+        },
+        "decisionmakersb_readerrole_guid": {
+            "value": "cdd01d2d-3dea-4331-86a6-c43679a72970"
+        },
+        "decisionmakersb_senderrole_guid": {
+            "value": "d876cab1-9db6-4fa5-b867-a82040b057e9"
         },
         "txtxproccs_readerrole_guid": {
             "value": "dad5a70e-a86a-4c6a-b066-9d5aa39b74d3"

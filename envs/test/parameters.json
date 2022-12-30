@@ -66,6 +66,18 @@
                 }
             }
         },
+        "appserviceplan_decisionmaker": {
+            "value": {
+                "name": "aspwetestmemesfinderdmaker",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "appserviceplan_memeprocessor": {
             "value": {
                 "name": "aspwetestmemesfindermemproc",
@@ -92,6 +104,12 @@
                 "environment": "Test"
             }
         },
+        "functionapp_decisionmaker": {
+            "value": {
+                "name": "fawetestmemesfinderdmaker",
+                "environment": "Test"
+            }
+        },
         "functionapp_memeprocessor": {
             "value": {
                 "name": "fawetestmemesfindermemproc",
@@ -109,7 +127,13 @@
             "value": "87520b6a-f519-45c4-a13f-43ccafe58f80"
         },
         "txtxprocsb_readerrole_guid": {
-            "value": "9b60eb8e-c09b-4388-b654-fb18be43c943"
+            "value": "d66fde62-1510-4612-b636-97efadd2110b"
+        },
+        "decisionmakersb_readerrole_guid": {
+            "value": "36417378-9fb1-450b-86bc-ff6fa21d2c0a"
+        },
+        "decisionmakersb_senderrole_guid": {
+            "value": "06678ede-3cea-4f58-af78-218785a40c96"
         },
         "txtxproccs_readerrole_guid": {
             "value": "7a9a7675-518f-411c-bcac-8e11864d4cb6"
