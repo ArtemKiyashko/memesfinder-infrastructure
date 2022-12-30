@@ -23,7 +23,9 @@ This project using only SaaS model of Azure resources (nothing for IaaS/PaaS or 
 
 ## Services repositories
 
-[Gateway](https://github.com/ArtemKiyashko/memesfinder-gateway) - receiving Telegram HTTP updates with messages from chat. This service takes the responsibility of taking the decision for processing particular message. If positive dicision taken - just forwarding message to ServiceBus topic
+[Gateway](https://github.com/ArtemKiyashko/memesfinder-gateway) - receiving Telegram HTTP updates with messages from chat. 
+
+[DecisionMaker](https://github.com/ArtemKiyashko/memesfinder-decisionmaker) - this service takes the responsibility of taking the decision for processing particular message. If positive dicision taken - just forwarding message to ServiceBus topic
 
 [TextProcessor](https://github.com/ArtemKiyashko/memesfinder-textprocessor) - finding key phrases in original message via Azure Congnitive Services
 
@@ -42,15 +44,19 @@ flowchart TD;
 
 A(TG HTTP IN);
 B(FA: Gateway);
-C(SB: alltgmessages)
-D(FA: TextProcessor)
-E(SB: keywordmessages)
-F(FA: ProcessMeme)
-Z(TG HTTP OUT)
+C(SB: allmessages);
+G(FA: DecisionMaker);
+H(SB: textmessages);
+D(FA: TextProcessor);
+E(SB: keywordmessages);
+F(FA: ProcessMeme);
+Z(TG HTTP OUT);
 
 A -- Update --> B
 B -- Update --> C
-C -- Update --> D
+C -- Update --> G
+G -- Update --> H
+H -- Update --> D
 D -- MessageWithKeyword --> E
 E -- MessageWithKeyword --> F
 F -- PhotoMessage --> Z
