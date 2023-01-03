@@ -463,14 +463,6 @@
                 "softDeleteRetentionInDays": 90,
                 "enableRbacAuthorization": false,
                 "publicNetworkAccess": "Enabled",
-                "accessPolicies": []
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/accessPolicies",
-            "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('keyvault').name, '/add')]",
-            "properties": {
                 "accessPolicies": [
                     {
                         "objectId": "[parameters('keyvault').adminuserobjectid]",
@@ -498,7 +490,6 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvault').name)]",
                 "[resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name)]",
                 "[resourceId('Microsoft.Web/sites', parameters('functionapp_gateway').name)]"
             ]
