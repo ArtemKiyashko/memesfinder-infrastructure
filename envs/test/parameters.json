@@ -94,7 +94,6 @@
             "value": {
                 "name": "fawetestmemesfindergateway",
                 "environment": "Test",
-                "rolldice_decision_top_bound": 17,
                 "chatswhitelist_kvsecretname": "ChatWhitelistDecisionMakerOptions--AllowedChatIds"
             }
         },
@@ -107,7 +106,8 @@
         "functionapp_decisionmaker": {
             "value": {
                 "name": "fawetestmemesfinderdmaker",
-                "environment": "Test"
+                "environment": "Test",
+                "rolldice_decision_top_bound": 17
             }
         },
         "functionapp_memeprocessor": {

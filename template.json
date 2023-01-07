@@ -834,10 +834,6 @@
                             "value": "[parameters('functionapp_gateway').environment]"
                         },
                         {
-                            "name": "RollDiceDecisionMakerOptions__RangeTop",
-                            "value": "[parameters('functionapp_gateway').rolldice_decision_top_bound]"
-                        },
-                        {
                             "name": "ChatWhitelistDecisionMakerOptions__AllowedChatIds",
                             "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_gateway').chatswhitelist_kvsecretname,')')]"
                         },
@@ -1040,6 +1036,10 @@
                         {
                             "name": "AZURE_FUNCTIONS_ENVIRONMENT",
                             "value": "[parameters('functionapp_decisionmaker').environment]"
+                        },
+                        {
+                            "name": "RollDiceDecisionMakerOptions__RangeTop",
+                            "value": "[parameters('functionapp_decisionmaker').rolldice_decision_top_bound]"
                         },
                         {
                             "name": "ServiceBusOptions__TextMessagesTopic",
