@@ -83,13 +83,19 @@
         },
         "orchestratorsb_senderrole_guid": {
             "type": "array"
+        },
+        "smartDetectionActionGroup": {
+            "type": "object"
         }
     },
     "variables": {
         "rsgLocation": "[resourceGroup().location]",
         "servicebus_sender_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39')]",
         "servicebus_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0')]",
-        "languageservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7628b7b8-a8b2-4cdc-b46f-e9b35248918e')]"
+        "languageservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7628b7b8-a8b2-4cdc-b46f-e9b35248918e')]",
+        "linkToAiResourceSmartRules": "[concat('hidden-link:', resourceId('microsoft.insights/components', parameters('appinsights').name))]",
+        "monitoringContributorRoleId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '749f88d5-cbae-40b8-bcfc-e573ddc772fa')]",
+        "monitoringReaderRoleId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '43d0d8ad-25c7-4714-9337-8ba259a9fe05')]"
     },
     "resources": [
         {
@@ -154,318 +160,423 @@
             },
             "dependsOn": [
                 "[resourceId('microsoft.operationalinsights/workspaces', parameters('loganalyticsworkspace').name)]"
+            ],
+            "resources": [
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "degradationindependencyduration",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "enabled": true,
+                        "name": "degradationindependencyduration",
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "degradationinserverresponsetime",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "degradationinserverresponsetime",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "digestMailConfiguration",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "digestMailConfiguration",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_billingdatavolumedailyspikeextension",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_billingdatavolumedailyspikeextension",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_canaryextension",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_canaryextension",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_exceptionchangeextension",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_exceptionchangeextension",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_memoryleakextension",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_memoryleakextension",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_securityextensionspackage",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_securityextensionspackage",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_traceseveritydetector",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_traceseveritydetector",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "longdependencyduration",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "longdependencyduration",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "migrationToAlertRulesCompleted",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "migrationToAlertRulesCompleted",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": false,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "slowpageloadtime",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "slowpageloadtime",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "slowserverresponsetime",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "slowserverresponsetime",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                }
             ]
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/degradationindependencyduration')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "Microsoft.Insights/actionGroups",
+            "apiVersion": "2021-09-01",
+            "name": "[parameters('smartDetectionActionGroup').name]",
+            "location": "Global",
             "dependsOn": [
                 "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "degradationindependencyduration",
-                    "DisplayName": "Degradation in dependency duration",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
+                "groupShortName": "[parameters('smartDetectionActionGroup').shortName]",
                 "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "armRoleReceivers": [
+                    {
+                        "name": "Monitoring Contributor",
+                        "roleId": "[variables('monitoringContributorRoleId')]",
+                        "useCommonAlertSchema": true
+                    },
+                    {
+                        "name": "Monitoring Reader",
+                        "roleId": "[variables('monitoringReaderRoleId')]",
+                        "useCommonAlertSchema": true
+                    }
+                ]
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/degradationinserverresponsetime')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Dependency Latency Degradation - ', parameters('appinsights').name)]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "degradationinserverresponsetime",
-                    "DisplayName": "Degradation in server response time",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
+                "description": "Dependency Latency Degradation notifies you of an unusual increase in response by a dependency your app is calling (e.g. REST API or database)",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "DependencyPerformanceDegradationDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/digestMailConfiguration')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Exception Anomalies - ', parameters('appinsights').name)]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "digestMailConfiguration",
-                    "DisplayName": "Digest Mail Configuration",
-                    "Description": "This rule describes the digest mail preferences",
-                    "HelpUrl": "www.homail.com",
-                    "IsHidden": true,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
+                "description": "Exception Anomalies notifies you of an unusual rise in the rate of exceptions thrown by your app.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "ExceptionVolumeChangedDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_billingdatavolumedailyspikeextension')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Failure Anomalies - ', parameters('appinsights').name)]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_billingdatavolumedailyspikeextension",
-                    "DisplayName": "Abnormal rise in daily data volume (preview)",
-                    "Description": "This detection rule automatically analyzes the billing data generated by your application, and can warn you about an unusual increase in your application's billing costs",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/billing-data-volume-daily-spike.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
+                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "PT1M",
+                "detector": {
+                    "id": "FailureAnomaliesDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_canaryextension')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Potential Memory Leak - ', parameters('appinsights').name)]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_canaryextension",
-                    "DisplayName": "Canary extension",
-                    "Description": "Canary extension",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/",
-                    "IsHidden": true,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
+                "description": "Potential Memory Leak notifies you of increased memory consumption pattern by your app which may indicate a potential memory leak.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "MemoryLeakDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_exceptionchangeextension')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Response Latency Degradation - ', parameters('appinsights').name)]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_exceptionchangeextension",
-                    "DisplayName": "Abnormal rise in exception volume (preview)",
-                    "Description": "This detection rule automatically analyzes the exceptions thrown in your application, and can warn you about unusual patterns in your exception telemetry.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/abnormal-rise-in-exception-volume.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
+                "description": "Response Latency Degradation notifies you of an unusual increase in latency in your app response to requests.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "RequestPerformanceDegradationDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_memoryleakextension')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Trace Severity Degradation - ', parameters('appinsights').name)]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_memoryleakextension",
-                    "DisplayName": "Potential memory leak detected (preview)",
-                    "Description": "This detection rule automatically analyzes the memory consumption of each process in your application, and can warn you about potential memory leaks or increased memory consumption.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/memory-leak.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
+                "description": "Trace Severity Degradation notifies you of an unusual increase in the severity of the traces generated by your app.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "TraceSeverityDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_securityextensionspackage')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_securityextensionspackage",
-                    "DisplayName": "Potential security issue detected (preview)",
-                    "Description": "This detection rule automatically analyzes the telemetry generated by your application and detects potential security issues.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/application-security-detection-pack.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_traceseveritydetector')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_traceseveritydetector",
-                    "DisplayName": "Degradation in trace severity ratio (preview)",
-                    "Description": "This detection rule automatically analyzes the trace logs emitted from your application, and can warn you about unusual patterns in the severity of your trace telemetry.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/degradation-in-trace-severity-ratio.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/longdependencyduration')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "longdependencyduration",
-                    "DisplayName": "Long dependency duration",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/migrationToAlertRulesCompleted')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "migrationToAlertRulesCompleted",
-                    "DisplayName": "Migration To Alert Rules Completed",
-                    "Description": "A configuration that controls the migration state of Smart Detection to Smart Alerts",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": true,
-                    "IsEnabledByDefault": false,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": false,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/slowpageloadtime')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "slowpageloadtime",
-                    "DisplayName": "Slow page load time",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/slowserverresponsetime')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "slowserverresponsetime",
-                    "DisplayName": "Slow server response time",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {

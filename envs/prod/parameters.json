@@ -26,6 +26,12 @@
                 "name": "aiweprivatememesfinder"
             }
         },
+        "smartDetectionActionGroup": {
+            "value": {
+                "name": "Application Insights Smart Detection",
+                "shortName": "SmartDetect"
+            }
+        },
         "keyvault": {
             "value": {
                 "name": "kvweprivatememesfinder",
