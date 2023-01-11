@@ -71,6 +71,18 @@
         },
         "decisionmakersb_senderrole_guid": {
             "type": "string"
+        },
+        "appserviceplan_messageorchestrator": {
+            "type": "object"
+        },
+        "functionapp_messageorchestrator": {
+            "type": "object"
+        },
+        "orchestratorsb_readerrole_guid": {
+            "type": "string"
+        },
+        "orchestratorsb_senderrole_guid": {
+            "type": "array"
         }
     },
     "variables": {
@@ -590,6 +602,50 @@
             }
         },
         {
+            "type": "Microsoft.ServiceBus/namespaces/topics",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/generalmessages')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "maxMessageSizeInKilobytes": 256,
+                "defaultMessageTimeToLive": "P14D",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "enableBatchedOperations": true,
+                "status": "Active",
+                "supportOrdering": true,
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/generalmessages/decisionmaker')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "isClientAffine": false,
+                "lockDuration": "PT30S",
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "deadLetteringOnFilterEvaluationExceptions": false,
+                "maxDeliveryCount": 10,
+                "status": "Active",
+                "enableBatchedOperations": true,
+                "autoDeleteOnIdle": "P14D"
+            }
+        },
+        {
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/textmessages/textprocessor')]",
@@ -614,7 +670,7 @@
         {
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
-            "name": "[concat(parameters('servicebus').name, '/allmessages/decisionmaker')]",
+            "name": "[concat(parameters('servicebus').name, '/allmessages/orchestrator')]",
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
@@ -740,6 +796,27 @@
             "location": "[variables('rsgLocation')]",
             "tags": "[parameters('defaultTags')]",
             "sku": "[parameters('appserviceplan_decisionmaker').sku]",
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('appserviceplan_messageorchestrator').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('appserviceplan_messageorchestrator').sku]",
             "kind": "functionapp",
             "properties": {
                 "perSiteScaling": false,
@@ -1082,6 +1159,106 @@
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
+            "name": "[parameters('functionapp_messageorchestrator').name]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_messageorchestrator').name)]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
+                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+            ],
+            "tags": "[parameters('defaultTags')]",
+            "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_messageorchestrator').name)]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": true,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0,
+                    "netFrameworkVersion": "v6.0",
+                    "ftpsState": "Disabled",
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
+                        },
+                        {
+                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                            "value": "[parameters('functionapp_messageorchestrator').environment]"
+                        },
+                        {
+                            "name": "ServiceBusOptions__GeneralMessagesTopic",
+                            "value": "generalmessages"
+                        },
+                        {
+                            "name": "ServiceBusOptions__KeywordMessagesTopic",
+                            "value": "keywordmessages"
+                        },
+                        {
+                            "name": "ServiceBusOptions__FullyQualifiedNamespace",
+                            "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(parameters('functionapp_messageorchestrator').name)]"
+                        },
+                        {
+                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                            "value": "true"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_memeprocessor').name]",
             "location": "West Europe",
             "dependsOn": [
@@ -1233,9 +1410,9 @@
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
             "name": "[parameters('decisionmakersb_readerrole_guid')]",
-            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/generalmessages')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
                 "[resourceId('Microsoft.Web/sites', parameters('functionapp_decisionmaker').name)]"
             ],
             "properties": {
@@ -1283,6 +1460,48 @@
             "properties": {
                 "roleDefinitionId": "[variables('servicebus_reader_role')]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[parameters('orchestratorsb_readerrole_guid')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_reader_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[parameters('orchestratorsb_senderrole_guid')[0]]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/generalmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_sender_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[parameters('orchestratorsb_senderrole_guid')[1]]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/keywordmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_sender_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
             }
         }
     ]
