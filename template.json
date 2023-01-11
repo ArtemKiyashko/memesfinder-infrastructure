@@ -93,9 +93,7 @@
         "servicebus_sender_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39')]",
         "servicebus_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0')]",
         "languageservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7628b7b8-a8b2-4cdc-b46f-e9b35248918e')]",
-        "linkToAiResourceSmartRules": "[concat('hidden-link:', resourceId('microsoft.insights/components', parameters('appinsights').name))]",
-        "monitoringContributorRoleId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '749f88d5-cbae-40b8-bcfc-e573ddc772fa')]",
-        "monitoringReaderRoleId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '43d0d8ad-25c7-4714-9337-8ba259a9fe05')]"
+        "linkToAiResourceSmartRules": "[concat('hidden-link:', resourceId('microsoft.insights/components', parameters('appinsights').name))]"
     },
     "resources": [
         {
@@ -402,6 +400,7 @@
             "type": "Microsoft.Insights/actionGroups",
             "apiVersion": "2021-09-01",
             "name": "[parameters('smartDetectionActionGroup').name]",
+            "tags": "[parameters('defaultTags')]",
             "location": "Global",
             "dependsOn": [
                 "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
@@ -409,24 +408,14 @@
             "properties": {
                 "groupShortName": "[parameters('smartDetectionActionGroup').shortName]",
                 "enabled": true,
-                "armRoleReceivers": [
-                    {
-                        "name": "Monitoring Contributor",
-                        "roleId": "[variables('monitoringContributorRoleId')]",
-                        "useCommonAlertSchema": true
-                    },
-                    {
-                        "name": "Monitoring Reader",
-                        "roleId": "[variables('monitoringReaderRoleId')]",
-                        "useCommonAlertSchema": true
-                    }
-                ]
+                "armRoleReceivers": "[parameters('smartDetectionActionGroup').armRoleReceivers]"
             }
         },
         {
             "type": "microsoft.alertsmanagement/smartdetectoralertrules",
             "apiVersion": "2021-04-01",
             "name": "[concat('Dependency Latency Degradation - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
@@ -453,6 +442,7 @@
             "type": "microsoft.alertsmanagement/smartdetectoralertrules",
             "apiVersion": "2021-04-01",
             "name": "[concat('Exception Anomalies - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
@@ -479,6 +469,7 @@
             "type": "microsoft.alertsmanagement/smartdetectoralertrules",
             "apiVersion": "2021-04-01",
             "name": "[concat('Failure Anomalies - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
@@ -505,6 +496,7 @@
             "type": "microsoft.alertsmanagement/smartdetectoralertrules",
             "apiVersion": "2021-04-01",
             "name": "[concat('Potential Memory Leak - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
@@ -531,6 +523,7 @@
             "type": "microsoft.alertsmanagement/smartdetectoralertrules",
             "apiVersion": "2021-04-01",
             "name": "[concat('Response Latency Degradation - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
@@ -557,6 +550,7 @@
             "type": "microsoft.alertsmanagement/smartdetectoralertrules",
             "apiVersion": "2021-04-01",
             "name": "[concat('Trace Severity Degradation - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
