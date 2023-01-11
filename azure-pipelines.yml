@@ -1,16 +1,19 @@
-- repository: memesfinder-infrastructure
-  type: github
-  name: ArtemKiyashko/memesfinder-infrastructure
-  endpoint: github.com_ArtemKiyashko
-  trigger:
-    branches:
-      include:
-      - master
-      - development
-    paths:
-      exclude:
-      - 'README.md'
-      - 'img'
+resources:
+  repositories:
+  - repository: memesfinder-infrastructure
+    type: github
+    name: ArtemKiyashko/memesfinder-infrastructure
+    endpoint: github.com_ArtemKiyashko
+    
+trigger:
+  branches:
+    include:
+    - master
+    - development
+  paths:
+    exclude:
+    - 'README.md'
+    - 'img'
 
 pool:
   vmImage: ubuntu-latest
