@@ -1573,6 +1573,7 @@
             }
         },
         {
+            "condition": "[parameters('textAnalyticsService').deploy]",
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
             "name": "[guid(parameters('textAnalyticsService').name, parameters('functionapp_messageorchestrator').name, 'reader')]",
@@ -1587,6 +1588,7 @@
             }
         },
         {
+            "condition": "[parameters('textAnalyticsService').deploy]",
             "type": "Microsoft.CognitiveServices/accounts",
             "apiVersion": "2022-03-01",
             "name": "[parameters('textAnalyticsService').name]",

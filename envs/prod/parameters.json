@@ -157,9 +157,10 @@
         },
         "textAnalyticsService": {
             "value": {
+                "deploy": true,
                 "name": "luisweprivatememesfinder",
                 "sku": {
-                    "name": "F0"
+                    "name": "S"
                 }
             }
         }

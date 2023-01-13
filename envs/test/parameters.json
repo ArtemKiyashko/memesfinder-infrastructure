@@ -157,6 +157,7 @@
         },
         "textAnalyticsService": {
             "value": {
+                "deploy": true,
                 "name": "luiswetestmemesfinder",
                 "sku": {
                     "name": "F0"
