@@ -52,11 +52,14 @@ H(SB: textmessages);
 D(FA: TextProcessor);
 E(SB: keywordmessages);
 F(FA: ProcessMeme);
+I(FA: Orchestrator)
 Z(TG HTTP OUT);
 
 A -- Update --> B
 B -- Update --> C
-C -- Update --> G
+C -- Update --> I
+I -- MessageWithKeyword --> E
+I -- Update --> G
 G -- Update --> H
 H -- Update --> D
 D -- MessageWithKeyword --> E
@@ -72,4 +75,4 @@ Legend:
 
 ### Resources to be created by this ARM template
 
-![azure_resources](img/rsgweprivatememesfinder.png)
+![azure_resources](img/testgroup.png)
