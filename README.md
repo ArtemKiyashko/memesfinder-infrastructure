@@ -15,9 +15,9 @@ ProcessMeme: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinde
 
 ### Description
 
-This telegram bot is basically listening for the group messages, randomly choosing one of and replying with the picture, related to the one of the key phrase from the original message. Optionally this bot can reply to dedicated request if trained AI model (Azure Cognitive Services/LUIS/etc) determine specific pattern in income message.
+This telegram bot is basically listening for the group messages, randomly choosing one of and replying with the picture, related to the one of the key phrase from the original message. Optionally this bot can reply to dedicated request if trained AI model (Azure Cognitive Services/LUIS/etc) recognise specific pattern in income message.
 
-As a key phrase extractor and request entity extractor we are using [Azure Cognitive Services](https://azure.microsoft.com/en-us/products/cognitive-services/text-analytics/#overview)
+As a key phrase extractor and request entity extractor we are using [Azure Cognitive Services](https://azure.microsoft.com/en-us/products/cognitive-services)
 
 For picture search we are utilizing [Google Custom Search](https://developers.google.com/custom-search/v1/introduction) and it`s [.NET Client Library](https://developers.google.com/api-client-library/dotnet/apis/customsearch/v1)
 
