@@ -46,8 +46,7 @@
         },
         "keyvault": {
             "value": {
-                "name": "kvwetestmemesfinder",
-                "adminuserobjectid": "c9a65d52-474f-47da-bd2c-b28a9663ae6e"
+                "name": "kvwetestmemesfinder"
             }
         },
         "servicebus": {
@@ -156,35 +155,13 @@
                 "googlesearchengine_countryrestriction": ""
             }
         },
-        "fasb_senderrole_guid": {
-            "value": "98380f24-6263-4055-8af2-18ab7b5edd88"
-        },
-        "txtxprocsb_senderrole_guid": {
-            "value": "87520b6a-f519-45c4-a13f-43ccafe58f80"
-        },
-        "txtxprocsb_readerrole_guid": {
-            "value": "d66fde62-1510-4612-b636-97efadd2110b"
-        },
-        "decisionmakersb_readerrole_guid": {
-            "value": "9741a843-c522-4608-9a5c-0e71f4d4374e"
-        },
-        "decisionmakersb_senderrole_guid": {
-            "value": "06678ede-3cea-4f58-af78-218785a40c96"
-        },
-        "txtxproccs_readerrole_guid": {
-            "value": "7a9a7675-518f-411c-bcac-8e11864d4cb6"
-        },
-        "memprocsb_readerrole_guid": {
-            "value": "1e11e63e-2b3c-49d4-b786-fbab7a66ceb1"
-        },
-        "orchestratorsb_readerrole_guid": {
-            "value": "a8e53c1f-9277-4ed1-82ac-ad56d99222af"
-        },
-        "orchestratorsb_senderrole_guid": {
-            "value": [
-                "482e48d3-3a99-447d-a919-b130ea66b233",
-                "37f3cfe5-2b0a-4598-a4a9-1744bf6dcadb"
-            ]
+        "textAnalyticsService": {
+            "value": {
+                "name": "luiswetestmemesfinder",
+                "sku": {
+                    "name": "F0"
+                }
+            }
         }
     }
 }

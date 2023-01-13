@@ -46,8 +46,7 @@
         },
         "keyvault": {
             "value": {
-                "name": "kvweprivatememesfinder",
-                "adminuserobjectid": "c9a65d52-474f-47da-bd2c-b28a9663ae6e"
+                "name": "kvweprivatememesfinder"
             }
         },
         "servicebus": {
@@ -156,35 +155,13 @@
                 "googlesearchengine_countryrestriction": ""
             }
         },
-        "fasb_senderrole_guid": {
-            "value": "75ebc6ab-21fa-4ffc-94df-45839a0e6616"
-        },
-        "txtxprocsb_senderrole_guid": {
-            "value": "39f41a7e-f92a-4641-a5c3-d9fbce2261a7"
-        },
-        "txtxprocsb_readerrole_guid": {
-            "value": "96dc133e-c1f3-4776-bcc6-b80720d7f545"
-        },
-        "decisionmakersb_readerrole_guid": {
-            "value": "3241d605-1cd7-4099-bc23-a803fd7694bd"
-        },
-        "decisionmakersb_senderrole_guid": {
-            "value": "d876cab1-9db6-4fa5-b867-a82040b057e9"
-        },
-        "txtxproccs_readerrole_guid": {
-            "value": "dad5a70e-a86a-4c6a-b066-9d5aa39b74d3"
-        },
-        "memprocsb_readerrole_guid": {
-            "value": "62b35d83-594c-4d97-b049-8ff49f86148f"
-        },
-        "orchestratorsb_readerrole_guid": {
-            "value": "653747bc-b03c-49a2-a2cb-97b2a81e9954"
-        },
-        "orchestratorsb_senderrole_guid": {
-            "value": [
-                "47d62d1f-d1a4-4f20-a409-0229ad9315ec",
-                "893829ea-c77b-4167-8c55-6fe582620f1c"
-            ]
+        "textAnalyticsService": {
+            "value": {
+                "name": "luisweprivatememesfinder",
+                "sku": {
+                    "name": "F0"
+                }
+            }
         }
     }
 }

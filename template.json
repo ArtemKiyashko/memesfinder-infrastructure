@@ -29,27 +29,11 @@
         "functionapp_gateway": {
             "type": "object"
         },
-        "fasb_senderrole_guid": {
-            "type": "string",
-            "defaultValue": "[newGuid()]",
-            "metadata": {
-                "description": "A new GUID used to identify the role assignment"
-            }
-        },
         "functionapp_textprocessor": {
             "type": "object"
         },
         "appserviceplan_textprocessor": {
             "type": "object"
-        },
-        "txtxprocsb_senderrole_guid": {
-            "type": "string"
-        },
-        "txtxprocsb_readerrole_guid": {
-            "type": "string"
-        },
-        "txtxproccs_readerrole_guid": {
-            "type": "string"
         },
         "appserviceplan_memeprocessor": {
             "type": "object"
@@ -57,20 +41,11 @@
         "functionapp_memeprocessor": {
             "type": "object"
         },
-        "memprocsb_readerrole_guid": {
-            "type": "string"
-        },
         "appserviceplan_decisionmaker": {
             "type": "object"
         },
         "functionapp_decisionmaker": {
             "type": "object"
-        },
-        "decisionmakersb_readerrole_guid": {
-            "type": "string"
-        },
-        "decisionmakersb_senderrole_guid": {
-            "type": "string"
         },
         "appserviceplan_messageorchestrator": {
             "type": "object"
@@ -78,13 +53,10 @@
         "functionapp_messageorchestrator": {
             "type": "object"
         },
-        "orchestratorsb_readerrole_guid": {
-            "type": "string"
-        },
-        "orchestratorsb_senderrole_guid": {
-            "type": "array"
-        },
         "smartDetectionActionGroup": {
+            "type": "object"
+        },
+        "textAnalyticsService": {
             "type": "object"
         }
     },
@@ -594,15 +566,6 @@
                 "publicNetworkAccess": "Enabled",
                 "accessPolicies": [
                     {
-                        "objectId": "[parameters('keyvault').adminuserobjectid]",
-                        "permissions": {
-                            "certificates": [ "all" ],
-                            "keys": [ "all" ],
-                            "secrets": [ "all" ]
-                        },
-                        "tenantId": "[subscription().tenantId]"
-                    },
-                    {
                         "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name), '2022-03-01', 'Full').identity.principalId]",
                         "permissions": {
                             "secrets": [ "get" ]
@@ -644,7 +607,7 @@
             "type": "Microsoft.ServiceBus/namespaces/topics",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/allmessages')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
             ],
@@ -666,7 +629,7 @@
             "type": "Microsoft.ServiceBus/namespaces/topics",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/textmessages')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
             ],
@@ -688,7 +651,7 @@
             "type": "Microsoft.ServiceBus/namespaces/topics",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/keywordmessages')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
             ],
@@ -710,7 +673,7 @@
             "type": "Microsoft.ServiceBus/namespaces/topics",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/generalmessages')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
             ],
@@ -732,7 +695,7 @@
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/generalmessages/decisionmaker')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
@@ -754,7 +717,7 @@
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/textmessages/textprocessor')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'textmessages')]",
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
@@ -776,7 +739,7 @@
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/allmessages/orchestrator')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
@@ -798,7 +761,7 @@
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/keywordmessages/memeprocessor')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
@@ -961,7 +924,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_gateway').name]",
-            "location": "West Europe",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_gateway').name)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
@@ -1061,7 +1024,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_textprocessor').name]",
-            "location": "West Europe",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_textprocessor').name)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
@@ -1165,7 +1128,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_decisionmaker').name]",
-            "location": "West Europe",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_decisionmaker').name)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
@@ -1265,7 +1228,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_messageorchestrator').name]",
-            "location": "West Europe",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_messageorchestrator').name)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
@@ -1365,7 +1328,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_memeprocessor').name]",
-            "location": "West Europe",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_memeprocessor').name)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
@@ -1472,7 +1435,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('fasb_senderrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'allmessages', parameters('functionapp_gateway').name, 'sender')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
@@ -1486,7 +1449,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('txtxprocsb_senderrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'keywordmessages', parameters('functionapp_textprocessor').name, 'sender')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/keywordmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
@@ -1500,7 +1463,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('txtxprocsb_readerrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'textmessages', parameters('functionapp_textprocessor').name, 'reader')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/textmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'textmessages')]",
@@ -1514,7 +1477,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('decisionmakersb_readerrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'generalmessages', parameters('functionapp_decisionmaker').name, 'reader')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/generalmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
@@ -1528,7 +1491,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('decisionmakersb_senderrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'textmessages', parameters('functionapp_decisionmaker').name, 'sender')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/textmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'textmessages')]",
@@ -1542,7 +1505,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('txtxproccs_readerrole_guid')]",
+            "name": "[guid(parameters('cognitiveservices').name, parameters('functionapp_textprocessor').name, 'reader')]",
             "scope": "[concat('Microsoft.CognitiveServices/accounts/', parameters('cognitiveservices').name)]",
             "dependsOn": [
                 "[resourceId('Microsoft.CognitiveServices/accounts/', parameters('cognitiveservices').name)]",
@@ -1556,7 +1519,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('memprocsb_readerrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'keywordmessages', parameters('functionapp_memeprocessor').name, 'reader')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/keywordmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
@@ -1570,7 +1533,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('orchestratorsb_readerrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'allmessages', parameters('functionapp_messageorchestrator').name, 'reader')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
@@ -1584,7 +1547,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('orchestratorsb_senderrole_guid')[0]]",
+            "name": "[guid(parameters('servicebus').name, 'generalmessages', parameters('functionapp_messageorchestrator').name, 'sender')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/generalmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
@@ -1598,7 +1561,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('orchestratorsb_senderrole_guid')[1]]",
+            "name": "[guid(parameters('servicebus').name, 'keywordmessages', parameters('functionapp_messageorchestrator').name, 'sender')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/keywordmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
@@ -1607,6 +1570,42 @@
             "properties": {
                 "roleDefinitionId": "[variables('servicebus_sender_role')]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('textAnalyticsService').name, parameters('functionapp_messageorchestrator').name, 'reader')]",
+            "scope": "[concat('Microsoft.CognitiveServices/accounts/', parameters('textAnalyticsService').name)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('textAnalyticsService').name)]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('languageservices_reader_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('textAnalyticsService').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('textAnalyticsService').sku]",
+            "kind": "TextAnalytics",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "apiProperties": {},
+                "customSubDomainName": "[parameters('textAnalyticsService').name]",
+                "networkAcls": {
+                    "defaultAction": "Allow",
+                    "virtualNetworkRules": [],
+                    "ipRules": []
+                },
+                "publicNetworkAccess": "Enabled"
             }
         }
     ]
