@@ -26,10 +26,27 @@
                 "name": "aiwetestmemesfinder"
             }
         },
+        "smartDetectionActionGroup": {
+            "value": {
+                "name": "Application Insights Smart Detection",
+                "shortName": "SmartDetect",
+                "armRoleReceivers": [
+                    {
+                        "name": "Monitoring Contributor",
+                        "roleId": "749f88d5-cbae-40b8-bcfc-e573ddc772fa",
+                        "useCommonAlertSchema": true
+                    },
+                    {
+                        "name": "Monitoring Reader",
+                        "roleId": "43d0d8ad-25c7-4714-9337-8ba259a9fe05",
+                        "useCommonAlertSchema": true
+                    }
+                ]
+            }
+        },
         "keyvault": {
             "value": {
-                "name": "kvwetestmemesfinder",
-                "adminuserobjectid": "c9a65d52-474f-47da-bd2c-b28a9663ae6e"
+                "name": "kvwetestmemesfinder"
             }
         },
         "servicebus": {
@@ -78,6 +95,18 @@
                 }
             }
         },
+        "appserviceplan_messageorchestrator": {
+            "value": {
+                "name": "aspwetestmemesfinderorstr",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "appserviceplan_memeprocessor": {
             "value": {
                 "name": "aspwetestmemesfindermemproc",
@@ -110,6 +139,12 @@
                 "rolldice_decision_top_bound": 17
             }
         },
+        "functionapp_messageorchestrator": {
+            "value": {
+                "name": "fawetestmemesfinderorstr",
+                "environment": "Test"
+            }
+        },
         "functionapp_memeprocessor": {
             "value": {
                 "name": "fawetestmemesfindermemproc",
@@ -120,26 +155,13 @@
                 "googlesearchengine_countryrestriction": ""
             }
         },
-        "fasb_senderrole_guid": {
-            "value": "98380f24-6263-4055-8af2-18ab7b5edd88"
-        },
-        "txtxprocsb_senderrole_guid": {
-            "value": "87520b6a-f519-45c4-a13f-43ccafe58f80"
-        },
-        "txtxprocsb_readerrole_guid": {
-            "value": "d66fde62-1510-4612-b636-97efadd2110b"
-        },
-        "decisionmakersb_readerrole_guid": {
-            "value": "36417378-9fb1-450b-86bc-ff6fa21d2c0a"
-        },
-        "decisionmakersb_senderrole_guid": {
-            "value": "06678ede-3cea-4f58-af78-218785a40c96"
-        },
-        "txtxproccs_readerrole_guid": {
-            "value": "7a9a7675-518f-411c-bcac-8e11864d4cb6"
-        },
-        "memprocsb_readerrole_guid": {
-            "value": "1e11e63e-2b3c-49d4-b786-fbab7a66ceb1"
+        "textAnalyticsService": {
+            "value": {
+                "name": "luiswetestmemesfinder",
+                "sku": {
+                    "name": "F0"
+                }
+            }
         }
     }
 }
