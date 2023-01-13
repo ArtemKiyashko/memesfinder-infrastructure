@@ -1587,6 +1587,7 @@
             }
         },
         {
+            "condition": "[parameters('textAnalyticsService').deploy]",
             "type": "Microsoft.CognitiveServices/accounts",
             "apiVersion": "2022-03-01",
             "name": "[parameters('textAnalyticsService').name]",
