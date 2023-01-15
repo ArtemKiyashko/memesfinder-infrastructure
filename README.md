@@ -7,7 +7,7 @@ Gateway: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_a
 
 Orchestrator: in-progress
 
-Greeter: in-progress
+Greeter: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-greeter?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=13&branchName=master)
 
 DecisionMaker: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-decisionmaker?branchName=main)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=12&branchName=main)
 
