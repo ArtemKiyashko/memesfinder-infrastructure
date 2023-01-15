@@ -119,6 +119,18 @@
                 }
             }
         },
+        "appserviceplan_greeter": {
+            "value": {
+                "name": "aspweprivatememesfindergreeter",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "functionapp_gateway": {
             "value": {
                 "name": "faweprivatememesfindergateway",
@@ -153,6 +165,22 @@
                 "googlesearchengine_apikey_kvsecretname": "SearchEngineOptions--ApiKey",
                 "googlesearchengine_engineid_kvsecretname": "SearchEngineOptions--EngineId",
                 "googlesearchengine_countryrestriction": ""
+            }
+        },
+        "functionapp_greeter": {
+            "value": {
+                "name": "faweprivatememesfindergreeter",
+                "environment": "Production",
+                "bottoken_kvsecretname": "TelegramBotOptions--Token",
+                "greetingsMarkdownTemplate": [
+                    "Приветствуем @{Username}\nПредставьтесь пожалуйста, откуда Вы? Сколько во Вроцлаве?\n\n\\#greetings"
+                ],
+                "greetingsThreadId": [
+                    66777
+                ],
+                "chatId": [
+                    -1001729338157
+                ]
             }
         },
         "textAnalyticsService": {

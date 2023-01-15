@@ -38,6 +38,9 @@
         "appserviceplan_memeprocessor": {
             "type": "object"
         },
+        "appserviceplan_greeter": {
+            "type": "object"
+        },
         "functionapp_memeprocessor": {
             "type": "object"
         },
@@ -53,6 +56,9 @@
         "functionapp_messageorchestrator": {
             "type": "object"
         },
+        "functionapp_greeter": {
+            "type": "object"
+        },
         "smartDetectionActionGroup": {
             "type": "object"
         },
@@ -65,6 +71,7 @@
         "servicebus_sender_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39')]",
         "servicebus_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0')]",
         "languageservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7628b7b8-a8b2-4cdc-b46f-e9b35248918e')]",
+        "cognitiveservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'a97b65f3-24c7-4388-baec-2e87135dc908')]",
         "linkToAiResourceSmartRules": "[concat('hidden-link:', resourceId('microsoft.insights/components', parameters('appinsights').name))]"
     },
     "resources": [
@@ -578,12 +585,20 @@
                             "secrets": [ "get" ]
                         },
                         "tenantId": "[subscription().tenantId]"
+                    },
+                    {
+                        "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_greeter').name), '2022-03-01', 'Full').identity.principalId]",
+                        "permissions": {
+                            "secrets": [ "get" ]
+                        },
+                        "tenantId": "[subscription().tenantId]"
                     }
                 ]
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name)]",
-                "[resourceId('Microsoft.Web/sites', parameters('functionapp_gateway').name)]"
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_gateway').name)]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_greeter').name)]"
             ]
         },
         {
@@ -692,6 +707,28 @@
             }
         },
         {
+            "type": "Microsoft.ServiceBus/namespaces/topics",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/newmembersmessages')]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "maxMessageSizeInKilobytes": 256,
+                "defaultMessageTimeToLive": "P14D",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "enableBatchedOperations": true,
+                "status": "Active",
+                "supportOrdering": true,
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            }
+        },
+        {
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/generalmessages/decisionmaker')]",
@@ -764,6 +801,28 @@
             "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "isClientAffine": false,
+                "lockDuration": "PT30S",
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "deadLetteringOnFilterEvaluationExceptions": false,
+                "maxDeliveryCount": 10,
+                "status": "Active",
+                "enableBatchedOperations": true,
+                "autoDeleteOnIdle": "P14D"
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/newmembersmessages/greeter')]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'newmembersmessages')]",
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
             ],
             "properties": {
@@ -906,6 +965,27 @@
             "location": "[variables('rsgLocation')]",
             "tags": "[parameters('defaultTags')]",
             "sku": "[parameters('appserviceplan_memeprocessor').sku]",
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('appserviceplan_greeter').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('appserviceplan_greeter').sku]",
             "kind": "functionapp",
             "properties": {
                 "perSiteScaling": false,
@@ -1433,6 +1513,115 @@
             }
         },
         {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('functionapp_greeter').name]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_greeter').name)]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
+                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+            ],
+            "tags": "[parameters('defaultTags')]",
+            "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_greeter').name)]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": true,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0,
+                    "netFrameworkVersion": "v6.0",
+                    "ftpsState": "Disabled",
+                    "appSettings": 
+                    [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
+                        },
+                        {
+                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                            "value": "[parameters('functionapp_greeter').environment]"
+                        },
+                        {
+                            "name": "ServiceBusOptions__FullyQualifiedNamespace",
+                            "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
+                        },
+                        {
+                            "name": "TelegramBotOptions__Token",
+                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_greeter').bottoken_kvsecretname,')')]"
+                        },
+                        {
+                            "name": "GreeterOptions__ChatOptions__0__GreetingsMarkdownTemplate",
+                            "value": "[parameters('functionapp_greeter').greetingsMarkdownTemplate[0]]"
+                        },
+                        {
+                            "name": "GreeterOptions__ChatOptions__0__GreetingsThreadId",
+                            "value": "[parameters('functionapp_greeter').greetingsThreadId[0]]"
+                        },
+                        {
+                            "name": "GreeterOptions__ChatOptions__0__ChatId",
+                            "value": "[parameters('functionapp_greeter').chatId[0]]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(parameters('functionapp_memeprocessor').name)]"
+                        },
+                        {
+                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                            "value": "true"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
             "name": "[guid(parameters('servicebus').name, 'allmessages', parameters('functionapp_gateway').name, 'sender')]",
@@ -1500,6 +1689,34 @@
             "properties": {
                 "roleDefinitionId": "[variables('servicebus_sender_role')]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_decisionmaker').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('servicebus').name, 'newmembersmessages', parameters('functionapp_messageorchestrator').name, 'sender')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/newmembersmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'newmembersmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_sender_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('servicebus').name, 'newmembersmessages', parameters('functionapp_greeter').name, 'reader')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/newmembersmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'newmembersmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_greeter').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_reader_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_greeter').name), '2022-03-01', 'Full').identity.principalId]"
             }
         },
         {
@@ -1583,7 +1800,7 @@
                 "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
             ],
             "properties": {
-                "roleDefinitionId": "[variables('languageservices_reader_role')]",
+                "roleDefinitionId": "[variables('cognitiveservices_reader_role')]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
             }
         },

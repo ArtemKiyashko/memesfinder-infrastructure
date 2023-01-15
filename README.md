@@ -7,6 +7,8 @@ Gateway: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_a
 
 Orchestrator: in-progress
 
+Greeter: in-progress
+
 DecisionMaker: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-decisionmaker?branchName=main)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=12&branchName=main)
 
 TextProcessor: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/ArtemKiyashko.memesfinder-gateway?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=8&branchName=master)
@@ -37,6 +39,8 @@ This project using only SaaS model of Azure resources (nothing for IaaS/PaaS or 
 
 [ProcessMeme](https://github.com/ArtemKiyashko/memesfinder-processmeme) - finding proper picture based on the key phrase received from `TextProcessor`. If picture found - replying to original Telegram message with that picture.
 
+[Greeter](https://github.com/ArtemKiyashko/memesfinder-greeter) - sending welcome message to new chat memebrs
+
 ## Architecture
 
 Stateless microservices based on Azure Function Apps with consumption service plan (can be changed in `parameters.json` file).
@@ -56,14 +60,21 @@ H(SB: textmessages);
 D(FA: TextProcessor);
 E(SB: keywordmessages);
 F(FA: ProcessMeme);
-I(FA: Orchestrator)
+I(FA: Orchestrator);
+J(FA: Greeter);
+K(SB: newmembersmessages);
+L(SB: generalmessages)
 Z(TG HTTP OUT);
 
 A -- Update --> B
 B -- Update --> C
 C -- Update --> I
 I -- MessageWithKeyword --> E
-I -- Update --> G
+I -- Update --> K
+K -- Update --> J
+J -- TextMessage --> Z 
+I -- Update --> L
+L -- Update --> G
 G -- Update --> H
 H -- Update --> D
 D -- MessageWithKeyword --> E

@@ -119,6 +119,18 @@
                 }
             }
         },
+        "appserviceplan_greeter": {
+            "value": {
+                "name": "aspwetestmemesfindergreeter",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "functionapp_gateway": {
             "value": {
                 "name": "fawetestmemesfindergateway",
@@ -153,6 +165,22 @@
                 "googlesearchengine_apikey_kvsecretname": "SearchEngineOptions--ApiKey",
                 "googlesearchengine_engineid_kvsecretname": "SearchEngineOptions--EngineId",
                 "googlesearchengine_countryrestriction": ""
+            }
+        },
+        "functionapp_greeter": {
+            "value": {
+                "name": "fawetestmemesfindergreeter",
+                "environment": "Test",
+                "bottoken_kvsecretname": "TelegramBotOptions--Token",
+                "greetingsMarkdownTemplate": [
+                    "Приветствуем @{Username}\nПредставьтесь пожалуйста, откуда Вы? Сколько во Вроцлаве?\n\n\\#greetings"
+                ],
+                "greetingsThreadId": [
+                    null
+                ],
+                "chatId": [
+                    -656259341
+                ]
             }
         },
         "textAnalyticsService": {
