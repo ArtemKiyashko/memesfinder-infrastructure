@@ -1597,7 +1597,7 @@
                         },
                         {
                             "name": "WEBSITE_CONTENTSHARE",
-                            "value": "[toLower(parameters('functionapp_memeprocessor').name)]"
+                            "value": "[toLower(parameters('functionapp_greeter').name)]"
                         },
                         {
                             "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
