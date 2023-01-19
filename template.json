@@ -707,28 +707,6 @@
             }
         },
         {
-            "type": "Microsoft.ServiceBus/namespaces/topics",
-            "apiVersion": "2022-01-01-preview",
-            "name": "[concat(parameters('servicebus').name, '/newmembersmessages')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
-            ],
-            "properties": {
-                "maxMessageSizeInKilobytes": 256,
-                "defaultMessageTimeToLive": "P14D",
-                "maxSizeInMegabytes": 1024,
-                "requiresDuplicateDetection": false,
-                "duplicateDetectionHistoryTimeWindow": "PT10M",
-                "enableBatchedOperations": true,
-                "status": "Active",
-                "supportOrdering": true,
-                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
-                "enablePartitioning": false,
-                "enableExpress": false
-            }
-        },
-        {
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/generalmessages/decisionmaker')]",
@@ -819,10 +797,10 @@
         {
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
-            "name": "[concat(parameters('servicebus').name, '/newmembersmessages/greeter')]",
+            "name": "[concat(parameters('servicebus').name, '/allmessages/greeter')]",
             "location": "[variables('rsgLocation')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'newmembersmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
             ],
             "properties": {
@@ -1694,24 +1672,10 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[guid(parameters('servicebus').name, 'newmembersmessages', parameters('functionapp_messageorchestrator').name, 'sender')]",
-            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/newmembersmessages')]",
+            "name": "[guid(parameters('servicebus').name, 'allmessages', parameters('functionapp_greeter').name, 'reader')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'newmembersmessages')]",
-                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
-            ],
-            "properties": {
-                "roleDefinitionId": "[variables('servicebus_sender_role')]",
-                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
-            }
-        },
-        {
-            "type": "Microsoft.Authorization/roleAssignments",
-            "apiVersion": "2022-04-01",
-            "name": "[guid(parameters('servicebus').name, 'newmembersmessages', parameters('functionapp_greeter').name, 'reader')]",
-            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/newmembersmessages')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'newmembersmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
                 "[resourceId('Microsoft.Web/sites', parameters('functionapp_greeter').name)]"
             ],
             "properties": {

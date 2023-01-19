@@ -62,16 +62,13 @@ E(SB: keywordmessages);
 F(FA: ProcessMeme);
 I(FA: Orchestrator);
 J(FA: Greeter);
-K(SB: newmembersmessages);
-L(SB: generalmessages)
+L(SB: generalmessages);
 Z(TG HTTP OUT);
 
 A -- Update --> B
 B -- Update --> C
 C -- Update --> I
 I -- MessageWithKeyword --> E
-I -- Update --> K
-K -- Update --> J
 J -- TextMessage --> Z 
 I -- Update --> L
 L -- Update --> G
@@ -80,6 +77,7 @@ H -- Update --> D
 D -- MessageWithKeyword --> E
 E -- MessageWithKeyword --> F
 F -- PhotoMessage --> Z
+C -- Update --> J
 ```
 
 Legend:
