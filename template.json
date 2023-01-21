@@ -1290,7 +1290,8 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_messageorchestrator').name)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('textAnalyticsService').name)]"
             ],
             "tags": "[parameters('defaultTags')]",
             "kind": "functionapp",
@@ -1351,6 +1352,34 @@
                         {
                             "name": "ServiceBusOptions__FullyQualifiedNamespace",
                             "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__UriEndpoint",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('textAnalyticsService').name), '2016-02-01-preview').Endpoint]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__ProjectName",
+                            "value": "[parameters('functionapp_messageorchestrator').luiProjectName]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__DeploymentName",
+                            "value": "[parameters('functionapp_messageorchestrator').luiDeploymentName]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__StringIndexType",
+                            "value": "[parameters('functionapp_messageorchestrator').luiStringIndexType]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__Language",
+                            "value": "[parameters('functionapp_messageorchestrator').luiLanguage]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__TargetIntent",
+                            "value": "[parameters('functionapp_messageorchestrator').luiTargetIntent]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__TargetCategory",
+                            "value": "[parameters('functionapp_messageorchestrator').luiTargetCategory]"
                         },
                         {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",

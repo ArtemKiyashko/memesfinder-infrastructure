@@ -154,7 +154,13 @@
         "functionapp_messageorchestrator": {
             "value": {
                 "name": "fawetestmemesfinderorstr",
-                "environment": "Test"
+                "environment": "Test",
+                "luiProjectName": "MemesFinder",
+                "luiDeploymentName": "Test",
+                "luiStringIndexType": "Utf16CodeUnit",
+                "luiLanguage": "ru",
+                "luiTargetIntent": "MemeRequest",
+                "luiTargetCategory": "MemeKeyPhrase"
             }
         },
         "functionapp_memeprocessor": {

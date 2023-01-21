@@ -154,7 +154,13 @@
         "functionapp_messageorchestrator": {
             "value": {
                 "name": "faweprivatememesfinderorstr",
-                "environment": "Production"
+                "environment": "Production",
+                "luiProjectName": "MemesFinder",
+                "luiDeploymentName": "Production",
+                "luiStringIndexType": "Utf16CodeUnit",
+                "luiLanguage": "ru",
+                "luiTargetIntent": "MemeRequest",
+                "luiTargetCategory": "MemeKeyPhrase"
             }
         },
         "functionapp_memeprocessor": {
