@@ -5,7 +5,7 @@ Infrastructure: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFi
 
 Gateway: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/ArtemKiyashko.memesfinder-gateway?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=8&branchName=master)
 
-Orchestrator: in-progress
+Orchestrator: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-messageorchestrator?branchName=main)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=15&branchName=main)
 
 Greeter: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-greeter?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=13&branchName=master)
 
