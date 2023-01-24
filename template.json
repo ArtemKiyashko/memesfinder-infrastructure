@@ -29,43 +29,50 @@
         "functionapp_gateway": {
             "type": "object"
         },
-        "fasb_senderrole_guid": {
-            "type": "string",
-            "defaultValue": "[newGuid()]",
-            "metadata": {
-                "description": "A new GUID used to identify the role assignment"
-            }
-        },
         "functionapp_textprocessor": {
             "type": "object"
         },
         "appserviceplan_textprocessor": {
             "type": "object"
         },
-        "txtxprocsb_senderrole_guid": {
-            "type": "string"
-        },
-        "txtxprocsb_readerrole_guid": {
-            "type": "string"
-        },
-        "txtxproccs_readerrole_guid": {
-            "type": "string"
-        },
         "appserviceplan_memeprocessor": {
+            "type": "object"
+        },
+        "appserviceplan_greeter": {
             "type": "object"
         },
         "functionapp_memeprocessor": {
             "type": "object"
         },
-        "memprocsb_readerrole_guid": {
-            "type": "string"
+        "appserviceplan_decisionmaker": {
+            "type": "object"
+        },
+        "functionapp_decisionmaker": {
+            "type": "object"
+        },
+        "appserviceplan_messageorchestrator": {
+            "type": "object"
+        },
+        "functionapp_messageorchestrator": {
+            "type": "object"
+        },
+        "functionapp_greeter": {
+            "type": "object"
+        },
+        "smartDetectionActionGroup": {
+            "type": "object"
+        },
+        "textAnalyticsService": {
+            "type": "object"
         }
     },
     "variables": {
         "rsgLocation": "[resourceGroup().location]",
         "servicebus_sender_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39')]",
         "servicebus_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0')]",
-        "languageservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7628b7b8-a8b2-4cdc-b46f-e9b35248918e')]"
+        "languageservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7628b7b8-a8b2-4cdc-b46f-e9b35248918e')]",
+        "cognitiveservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'a97b65f3-24c7-4388-baec-2e87135dc908')]",
+        "linkToAiResourceSmartRules": "[concat('hidden-link:', resourceId('microsoft.insights/components', parameters('appinsights').name))]"
     },
     "resources": [
         {
@@ -130,318 +137,419 @@
             },
             "dependsOn": [
                 "[resourceId('microsoft.operationalinsights/workspaces', parameters('loganalyticsworkspace').name)]"
+            ],
+            "resources": [
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "degradationindependencyduration",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "enabled": true,
+                        "name": "degradationindependencyduration",
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "degradationinserverresponsetime",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "degradationinserverresponsetime",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "digestMailConfiguration",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "digestMailConfiguration",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_billingdatavolumedailyspikeextension",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_billingdatavolumedailyspikeextension",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_canaryextension",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_canaryextension",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_exceptionchangeextension",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_exceptionchangeextension",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_memoryleakextension",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_memoryleakextension",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_securityextensionspackage",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_securityextensionspackage",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "extension_traceseveritydetector",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "extension_traceseveritydetector",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "longdependencyduration",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "longdependencyduration",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "migrationToAlertRulesCompleted",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "migrationToAlertRulesCompleted",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": false,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "slowpageloadtime",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "slowpageloadtime",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                },
+                {
+                    "type": "ProactiveDetectionConfigs",
+                    "apiVersion": "2018-05-01-preview",
+                    "name": "slowserverresponsetime",
+                    "location": "[variables('rsgLocation')]",
+                    "tags": {
+                        "[variables('linkToAiResourceSmartRules')]": "Resource"
+                    },
+                    "dependsOn": [
+                        "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                    ],
+                    "properties": {
+                        "name": "slowserverresponsetime",
+                        "enabled": true,
+                        "sendEmailsToSubscriptionOwners": true,
+                        "customEmails": []
+                    }
+                }
             ]
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/degradationindependencyduration')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "Microsoft.Insights/actionGroups",
+            "apiVersion": "2021-09-01",
+            "name": "[parameters('smartDetectionActionGroup').name]",
+            "tags": "[parameters('defaultTags')]",
+            "location": "Global",
             "dependsOn": [
                 "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "degradationindependencyduration",
-                    "DisplayName": "Degradation in dependency duration",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
+                "groupShortName": "[parameters('smartDetectionActionGroup').shortName]",
                 "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "armRoleReceivers": "[parameters('smartDetectionActionGroup').armRoleReceivers]"
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/degradationinserverresponsetime')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Dependency Latency Degradation - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "degradationinserverresponsetime",
-                    "DisplayName": "Degradation in server response time",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
+                "description": "Dependency Latency Degradation notifies you of an unusual increase in response by a dependency your app is calling (e.g. REST API or database)",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "DependencyPerformanceDegradationDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/digestMailConfiguration')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Exception Anomalies - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "digestMailConfiguration",
-                    "DisplayName": "Digest Mail Configuration",
-                    "Description": "This rule describes the digest mail preferences",
-                    "HelpUrl": "www.homail.com",
-                    "IsHidden": true,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
+                "description": "Exception Anomalies notifies you of an unusual rise in the rate of exceptions thrown by your app.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "ExceptionVolumeChangedDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_billingdatavolumedailyspikeextension')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Failure Anomalies - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_billingdatavolumedailyspikeextension",
-                    "DisplayName": "Abnormal rise in daily data volume (preview)",
-                    "Description": "This detection rule automatically analyzes the billing data generated by your application, and can warn you about an unusual increase in your application's billing costs",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/billing-data-volume-daily-spike.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
+                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "PT1M",
+                "detector": {
+                    "id": "FailureAnomaliesDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_canaryextension')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Potential Memory Leak - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_canaryextension",
-                    "DisplayName": "Canary extension",
-                    "Description": "Canary extension",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/",
-                    "IsHidden": true,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
+                "description": "Potential Memory Leak notifies you of increased memory consumption pattern by your app which may indicate a potential memory leak.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "MemoryLeakDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_exceptionchangeextension')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Response Latency Degradation - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_exceptionchangeextension",
-                    "DisplayName": "Abnormal rise in exception volume (preview)",
-                    "Description": "This detection rule automatically analyzes the exceptions thrown in your application, and can warn you about unusual patterns in your exception telemetry.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/abnormal-rise-in-exception-volume.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
+                "description": "Response Latency Degradation notifies you of an unusual increase in latency in your app response to requests.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "RequestPerformanceDegradationDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_memoryleakextension')]",
-            "location": "[variables('rsgLocation')]",
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[concat('Trace Severity Degradation - ', parameters('appinsights').name)]",
+            "tags": "[parameters('defaultTags')]",
+            "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_memoryleakextension",
-                    "DisplayName": "Potential memory leak detected (preview)",
-                    "Description": "This detection rule automatically analyzes the memory consumption of each process in your application, and can warn you about potential memory leaks or increased memory consumption.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/memory-leak.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
+                "description": "Trace Severity Degradation notifies you of an unusual increase in the severity of the traces generated by your app.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "P1D",
+                "detector": {
+                    "id": "TraceSeverityDetector"
                 },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_securityextensionspackage')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_securityextensionspackage",
-                    "DisplayName": "Potential security issue detected (preview)",
-                    "Description": "This detection rule automatically analyzes the telemetry generated by your application and detects potential security issues.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/application-security-detection-pack.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/extension_traceseveritydetector')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_traceseveritydetector",
-                    "DisplayName": "Degradation in trace severity ratio (preview)",
-                    "Description": "This detection rule automatically analyzes the trace logs emitted from your application, and can warn you about unusual patterns in the severity of your trace telemetry.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/degradation-in-trace-severity-ratio.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/longdependencyduration')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "longdependencyduration",
-                    "DisplayName": "Long dependency duration",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/migrationToAlertRulesCompleted')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "migrationToAlertRulesCompleted",
-                    "DisplayName": "Migration To Alert Rules Completed",
-                    "Description": "A configuration that controls the migration state of Smart Detection to Smart Alerts",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": true,
-                    "IsEnabledByDefault": false,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": false,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/slowpageloadtime')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "slowpageloadtime",
-                    "DisplayName": "Slow page load time",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('appinsights').name, '/slowserverresponsetime')]",
-            "location": "[variables('rsgLocation')]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "slowserverresponsetime",
-                    "DisplayName": "Slow server response time",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('smartDetectionActionGroup').name)]"
+                    ]
+                }
             }
         },
         {
@@ -463,26 +571,23 @@
                 "softDeleteRetentionInDays": 90,
                 "enableRbacAuthorization": false,
                 "publicNetworkAccess": "Enabled",
-                "accessPolicies": []
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/accessPolicies",
-            "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('keyvault').name, '/add')]",
-            "properties": {
                 "accessPolicies": [
                     {
-                        "objectId": "[parameters('keyvault').adminuserobjectid]",
+                        "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name), '2022-03-01', 'Full').identity.principalId]",
                         "permissions": {
-                            "certificates": [ "all" ],
-                            "keys": [ "all" ],
-                            "secrets": [ "all" ]
+                            "secrets": [ "get" ]
                         },
                         "tenantId": "[subscription().tenantId]"
                     },
                     {
-                        "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name), '2022-03-01', 'Full').identity.principalId]",
+                        "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_gateway').name), '2022-03-01', 'Full').identity.principalId]",
+                        "permissions": {
+                            "secrets": [ "get" ]
+                        },
+                        "tenantId": "[subscription().tenantId]"
+                    },
+                    {
+                        "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_greeter').name), '2022-03-01', 'Full').identity.principalId]",
                         "permissions": {
                             "secrets": [ "get" ]
                         },
@@ -491,8 +596,9 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvault').name)]",
-                "[resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name)]"
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name)]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_gateway').name)]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_greeter').name)]"
             ]
         },
         {
@@ -516,7 +622,29 @@
             "type": "Microsoft.ServiceBus/namespaces/topics",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/allmessages')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "maxMessageSizeInKilobytes": 256,
+                "defaultMessageTimeToLive": "P14D",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "enableBatchedOperations": true,
+                "status": "Active",
+                "supportOrdering": true,
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/textmessages')]",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
             ],
@@ -538,7 +666,29 @@
             "type": "Microsoft.ServiceBus/namespaces/topics",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/keywordmessages')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "maxMessageSizeInKilobytes": 256,
+                "defaultMessageTimeToLive": "P14D",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "enableBatchedOperations": true,
+                "status": "Active",
+                "supportOrdering": true,
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/generalmessages')]",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
             ],
@@ -559,8 +709,52 @@
         {
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
-            "name": "[concat(parameters('servicebus').name, '/allmessages/textprocessor')]",
-            "location": "westeurope",
+            "name": "[concat(parameters('servicebus').name, '/generalmessages/decisionmaker')]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "isClientAffine": false,
+                "lockDuration": "PT30S",
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "deadLetteringOnFilterEvaluationExceptions": false,
+                "maxDeliveryCount": 10,
+                "status": "Active",
+                "enableBatchedOperations": true,
+                "autoDeleteOnIdle": "P14D"
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/textmessages/textprocessor')]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'textmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "isClientAffine": false,
+                "lockDuration": "PT30S",
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "deadLetteringOnFilterEvaluationExceptions": false,
+                "maxDeliveryCount": 10,
+                "status": "Active",
+                "enableBatchedOperations": true,
+                "autoDeleteOnIdle": "P14D"
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/allmessages/orchestrator')]",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
@@ -582,9 +776,31 @@
             "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
             "apiVersion": "2022-01-01-preview",
             "name": "[concat(parameters('servicebus').name, '/keywordmessages/memeprocessor')]",
-            "location": "westeurope",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
+            ],
+            "properties": {
+                "isClientAffine": false,
+                "lockDuration": "PT30S",
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "deadLetteringOnFilterEvaluationExceptions": false,
+                "maxDeliveryCount": 10,
+                "status": "Active",
+                "enableBatchedOperations": true,
+                "autoDeleteOnIdle": "P14D"
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[concat(parameters('servicebus').name, '/allmessages/greeter')]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
                 "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebus').name)]"
             ],
             "properties": {
@@ -681,6 +897,48 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2022-03-01",
+            "name": "[parameters('appserviceplan_decisionmaker').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('appserviceplan_decisionmaker').sku]",
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('appserviceplan_messageorchestrator').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('appserviceplan_messageorchestrator').sku]",
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
             "name": "[parameters('appserviceplan_memeprocessor').name]",
             "location": "[variables('rsgLocation')]",
             "tags": "[parameters('defaultTags')]",
@@ -700,10 +958,31 @@
             }
         },
         {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('appserviceplan_greeter').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('appserviceplan_greeter').sku]",
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_gateway').name]",
-            "location": "West Europe",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_gateway').name)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
@@ -758,8 +1037,8 @@
                             "value": "[parameters('functionapp_gateway').environment]"
                         },
                         {
-                            "name": "RollDiceDecisionMakerOptions__RangeTop",
-                            "value": "[parameters('functionapp_gateway').rolldice_decision_top_bound]"
+                            "name": "ChatWhitelistDecisionMakerOptions__AllowedChatIds",
+                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_gateway').chatswhitelist_kvsecretname,')')]"
                         },
                         {
                             "name": "ServiceBusOptions__AllMessagesTopic",
@@ -803,7 +1082,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_textprocessor').name]",
-            "location": "West Europe",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_textprocessor').name)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
@@ -906,8 +1185,237 @@
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
+            "name": "[parameters('functionapp_decisionmaker').name]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_decisionmaker').name)]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
+                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+            ],
+            "tags": "[parameters('defaultTags')]",
+            "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_decisionmaker').name)]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": true,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0,
+                    "netFrameworkVersion": "v6.0",
+                    "ftpsState": "Disabled",
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
+                        },
+                        {
+                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                            "value": "[parameters('functionapp_decisionmaker').environment]"
+                        },
+                        {
+                            "name": "RollDiceDecisionMakerOptions__RangeTop",
+                            "value": "[parameters('functionapp_decisionmaker').rolldice_decision_top_bound]"
+                        },
+                        {
+                            "name": "ServiceBusOptions__TextMessagesTopic",
+                            "value": "textmessages"
+                        },
+                        {
+                            "name": "ServiceBusOptions__FullyQualifiedNamespace",
+                            "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(parameters('functionapp_decisionmaker').name)]"
+                        },
+                        {
+                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                            "value": "true"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('functionapp_messageorchestrator').name]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_messageorchestrator').name)]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
+                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('textAnalyticsService').name)]"
+            ],
+            "tags": "[parameters('defaultTags')]",
+            "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_messageorchestrator').name)]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": true,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0,
+                    "netFrameworkVersion": "v6.0",
+                    "ftpsState": "Disabled",
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
+                        },
+                        {
+                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                            "value": "[parameters('functionapp_messageorchestrator').environment]"
+                        },
+                        {
+                            "name": "ServiceBusOptions__GeneralMessagesTopic",
+                            "value": "generalmessages"
+                        },
+                        {
+                            "name": "ServiceBusOptions__KeywordMessagesTopic",
+                            "value": "keywordmessages"
+                        },
+                        {
+                            "name": "ServiceBusOptions__FullyQualifiedNamespace",
+                            "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__UriEndpoint",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('textAnalyticsService').name), '2016-02-01-preview').Endpoint]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__ProjectName",
+                            "value": "[parameters('functionapp_messageorchestrator').luiProjectName]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__DeploymentName",
+                            "value": "[parameters('functionapp_messageorchestrator').luiDeploymentName]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__StringIndexType",
+                            "value": "[parameters('functionapp_messageorchestrator').luiStringIndexType]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__Language",
+                            "value": "[parameters('functionapp_messageorchestrator').luiLanguage]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__TargetIntent",
+                            "value": "[parameters('functionapp_messageorchestrator').luiTargetIntent]"
+                        },
+                        {
+                            "name": "MessageAnalysisClientOptions__TargetCategory",
+                            "value": "[parameters('functionapp_messageorchestrator').luiTargetCategory]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(parameters('functionapp_messageorchestrator').name)]"
+                        },
+                        {
+                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                            "value": "true"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
             "name": "[parameters('functionapp_memeprocessor').name]",
-            "location": "West Europe",
+            "location": "[variables('rsgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_memeprocessor').name)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
@@ -1012,9 +1520,118 @@
             }
         },
         {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('functionapp_greeter').name]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_greeter').name)]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
+                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+            ],
+            "tags": "[parameters('defaultTags')]",
+            "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_greeter').name)]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": true,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0,
+                    "netFrameworkVersion": "v6.0",
+                    "ftpsState": "Disabled",
+                    "appSettings": 
+                    [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
+                        },
+                        {
+                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                            "value": "[parameters('functionapp_greeter').environment]"
+                        },
+                        {
+                            "name": "ServiceBusOptions__FullyQualifiedNamespace",
+                            "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
+                        },
+                        {
+                            "name": "TelegramBotOptions__Token",
+                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_greeter').bottoken_kvsecretname,')')]"
+                        },
+                        {
+                            "name": "GreeterOptions__ChatOptions__0__GreetingsMarkdownTemplate",
+                            "value": "[parameters('functionapp_greeter').greetingsMarkdownTemplate[0]]"
+                        },
+                        {
+                            "name": "GreeterOptions__ChatOptions__0__GreetingsThreadId",
+                            "value": "[parameters('functionapp_greeter').greetingsThreadId[0]]"
+                        },
+                        {
+                            "name": "GreeterOptions__ChatOptions__0__ChatId",
+                            "value": "[parameters('functionapp_greeter').chatId[0]]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(parameters('functionapp_greeter').name)]"
+                        },
+                        {
+                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                            "value": "true"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('fasb_senderrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'allmessages', parameters('functionapp_gateway').name, 'sender')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
@@ -1028,7 +1645,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('txtxprocsb_senderrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'keywordmessages', parameters('functionapp_textprocessor').name, 'sender')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/keywordmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
@@ -1042,10 +1659,10 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('txtxprocsb_readerrole_guid')]",
-            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
+            "name": "[guid(parameters('servicebus').name, 'textmessages', parameters('functionapp_textprocessor').name, 'reader')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/textmessages')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'textmessages')]",
                 "[resourceId('Microsoft.Web/sites', parameters('functionapp_textprocessor').name)]"
             ],
             "properties": {
@@ -1056,7 +1673,49 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('txtxproccs_readerrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'generalmessages', parameters('functionapp_decisionmaker').name, 'reader')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/generalmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_decisionmaker').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_reader_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_decisionmaker').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('servicebus').name, 'textmessages', parameters('functionapp_decisionmaker').name, 'sender')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/textmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'textmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_decisionmaker').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_sender_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_decisionmaker').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('servicebus').name, 'allmessages', parameters('functionapp_greeter').name, 'reader')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_greeter').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_reader_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_greeter').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('cognitiveservices').name, parameters('functionapp_textprocessor').name, 'reader')]",
             "scope": "[concat('Microsoft.CognitiveServices/accounts/', parameters('cognitiveservices').name)]",
             "dependsOn": [
                 "[resourceId('Microsoft.CognitiveServices/accounts/', parameters('cognitiveservices').name)]",
@@ -1070,7 +1729,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('memprocsb_readerrole_guid')]",
+            "name": "[guid(parameters('servicebus').name, 'keywordmessages', parameters('functionapp_memeprocessor').name, 'reader')]",
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/keywordmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
@@ -1079,6 +1738,86 @@
             "properties": {
                 "roleDefinitionId": "[variables('servicebus_reader_role')]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_memeprocessor').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('servicebus').name, 'allmessages', parameters('functionapp_messageorchestrator').name, 'reader')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/allmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'allmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_reader_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('servicebus').name, 'generalmessages', parameters('functionapp_messageorchestrator').name, 'sender')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/generalmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_sender_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('servicebus').name, 'keywordmessages', parameters('functionapp_messageorchestrator').name, 'sender')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/keywordmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'keywordmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_sender_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "condition": "[parameters('textAnalyticsService').deploy]",
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('textAnalyticsService').name, parameters('functionapp_messageorchestrator').name, 'reader')]",
+            "scope": "[concat('Microsoft.CognitiveServices/accounts/', parameters('textAnalyticsService').name)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('textAnalyticsService').name)]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('cognitiveservices_reader_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "condition": "[parameters('textAnalyticsService').deploy]",
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('textAnalyticsService').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('textAnalyticsService').sku]",
+            "kind": "TextAnalytics",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "apiProperties": {},
+                "customSubDomainName": "[parameters('textAnalyticsService').name]",
+                "networkAcls": {
+                    "defaultAction": "Allow",
+                    "virtualNetworkRules": [],
+                    "ipRules": []
+                },
+                "publicNetworkAccess": "Enabled"
             }
         }
     ]

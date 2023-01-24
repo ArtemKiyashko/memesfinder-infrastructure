@@ -26,10 +26,27 @@
                 "name": "aiwetestmemesfinder"
             }
         },
+        "smartDetectionActionGroup": {
+            "value": {
+                "name": "Application Insights Smart Detection",
+                "shortName": "SmartDetect",
+                "armRoleReceivers": [
+                    {
+                        "name": "Monitoring Contributor",
+                        "roleId": "749f88d5-cbae-40b8-bcfc-e573ddc772fa",
+                        "useCommonAlertSchema": true
+                    },
+                    {
+                        "name": "Monitoring Reader",
+                        "roleId": "43d0d8ad-25c7-4714-9337-8ba259a9fe05",
+                        "useCommonAlertSchema": true
+                    }
+                ]
+            }
+        },
         "keyvault": {
             "value": {
-                "name": "kvwetestmemesfinder",
-                "adminuserobjectid": "c9a65d52-474f-47da-bd2c-b28a9663ae6e"
+                "name": "kvwetestmemesfinder"
             }
         },
         "servicebus": {
@@ -66,9 +83,45 @@
                 }
             }
         },
+        "appserviceplan_decisionmaker": {
+            "value": {
+                "name": "aspwetestmemesfinderdmaker",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
+        "appserviceplan_messageorchestrator": {
+            "value": {
+                "name": "aspwetestmemesfinderorstr",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "appserviceplan_memeprocessor": {
             "value": {
                 "name": "aspwetestmemesfindermemproc",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
+        "appserviceplan_greeter": {
+            "value": {
+                "name": "aspwetestmemesfindergreeter",
                 "sku": {
                     "name": "Y1",
                     "tier": "Dynamic",
@@ -82,13 +135,32 @@
             "value": {
                 "name": "fawetestmemesfindergateway",
                 "environment": "Test",
-                "rolldice_decision_top_bound": 17
+                "chatswhitelist_kvsecretname": "ChatWhitelistDecisionMakerOptions--AllowedChatIds"
             }
         },
         "functionapp_textprocessor": {
             "value": {
                 "name": "fawetestmemesfindertxtproc",
                 "environment": "Test"
+            }
+        },
+        "functionapp_decisionmaker": {
+            "value": {
+                "name": "fawetestmemesfinderdmaker",
+                "environment": "Test",
+                "rolldice_decision_top_bound": 17
+            }
+        },
+        "functionapp_messageorchestrator": {
+            "value": {
+                "name": "fawetestmemesfinderorstr",
+                "environment": "Test",
+                "luiProjectName": "MemesFinder",
+                "luiDeploymentName": "Test",
+                "luiStringIndexType": "Utf16CodeUnit",
+                "luiLanguage": "ru",
+                "luiTargetIntent": "MemeRequest",
+                "luiTargetCategory": "MemeKeyPhrase"
             }
         },
         "functionapp_memeprocessor": {
@@ -98,23 +170,33 @@
                 "bottoken_kvsecretname": "TelegramBotOptions--Token",
                 "googlesearchengine_apikey_kvsecretname": "SearchEngineOptions--ApiKey",
                 "googlesearchengine_engineid_kvsecretname": "SearchEngineOptions--EngineId",
-                "googlesearchengine_countryrestriction": "countryRU"
+                "googlesearchengine_countryrestriction": ""
             }
         },
-        "fasb_senderrole_guid": {
-            "value": "98380f24-6263-4055-8af2-18ab7b5edd88"
+        "functionapp_greeter": {
+            "value": {
+                "name": "fawetestmemesfindergreeter",
+                "environment": "Test",
+                "bottoken_kvsecretname": "TelegramBotOptions--Token",
+                "greetingsMarkdownTemplate": [
+                    "Приветствуем @{PreferredUsername}\nЯ бот и отвечаю тут за мемасы и некоторые административные рутины. Например, у нас принято представляться всем новеньким и давать краткую информацию о себе. Если вам не комфортно преподносить это на публику, можете поздороваться с админами в личку.\nВ случае молчания более 24 часов, вы вызовете лишнее подозрение к себе. Я тегну админов на всякий случай.\n\nПредставьтесь пожалуйста, откуда Вы? Сколько во Вроцлаве?\n\n#greetings \n\n"
+                ],
+                "greetingsThreadId": [
+                    null
+                ],
+                "chatId": [
+                    -656259341
+                ]
+            }
         },
-        "txtxprocsb_senderrole_guid": {
-            "value": "87520b6a-f519-45c4-a13f-43ccafe58f80"
-        },
-        "txtxprocsb_readerrole_guid": {
-            "value": "9b60eb8e-c09b-4388-b654-fb18be43c943"
-        },
-        "txtxproccs_readerrole_guid": {
-            "value": "7a9a7675-518f-411c-bcac-8e11864d4cb6"
-        },
-        "memprocsb_readerrole_guid": {
-            "value": "1e11e63e-2b3c-49d4-b786-fbab7a66ceb1"
+        "textAnalyticsService": {
+            "value": {
+                "deploy": true,
+                "name": "luiswetestmemesfinder",
+                "sku": {
+                    "name": "F0"
+                }
+            }
         }
     }
 }

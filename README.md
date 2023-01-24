@@ -5,15 +5,21 @@ Infrastructure: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFi
 
 Gateway: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/ArtemKiyashko.memesfinder-gateway?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=8&branchName=master)
 
+Orchestrator: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-messageorchestrator?branchName=main)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=15&branchName=main)
+
+Greeter: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-greeter?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=13&branchName=master)
+
+DecisionMaker: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-decisionmaker?branchName=main)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=12&branchName=main)
+
 TextProcessor: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/ArtemKiyashko.memesfinder-gateway?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=8&branchName=master)
 
 ProcessMeme: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/ArtemKiyashko.memesfinder-processmeme?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=11&branchName=master)
 
 ### Description
 
-This telegram bot is basically listening for the group messages, randomly choosing one of and replying with the picture, related to the one of the key phrase from the original message.
+This telegram bot is basically listening for the group messages, randomly choosing one of and replying with the picture, related to the one of the key phrase from the original message. Optionally this bot can reply to dedicated request if trained AI model (Azure Cognitive Services/LUIS/etc) recognise specific pattern in income message.
 
-As a key phrase extractor we are using [Azure Text Analytics](https://azure.microsoft.com/en-us/products/cognitive-services/text-analytics/#overview) service (part of Cognitive Services)
+As a key phrase extractor and request entity extractor we are using [Azure Cognitive Services](https://azure.microsoft.com/en-us/products/cognitive-services)
 
 For picture search we are utilizing [Google Custom Search](https://developers.google.com/custom-search/v1/introduction) and it`s [.NET Client Library](https://developers.google.com/api-client-library/dotnet/apis/customsearch/v1)
 
@@ -23,11 +29,17 @@ This project using only SaaS model of Azure resources (nothing for IaaS/PaaS or 
 
 ## Services repositories
 
-[Gateway](https://github.com/KirillRukasov/memesfinder-gateway) - receiving Telegram HTTP updates with messages from chat. This service takes the responsibility of taking the decision for processing particular message. If positive dicision taken - just forwarding message to ServiceBus topic
+[Gateway](https://github.com/KirillRukasov/memesfinder-gateway) - receiving Telegram HTTP updates with messages from chat. 
 
-[TextProcessor](https://github.com/KirillRukasov/memesfinder-textprocessor) - finding key phrases in original message via Azure Congnitive Services
+[Orchestrator](https://github.com/KirillRukasov/memesfinder-messageorchestrator) - decides whenever it's a general message and should be processed through the DecisionMaker or dedicated meme request and should response immediately.
+
+[DecisionMaker](https://github.com/KirillRukasov/memesfinder-decisionmaker) - this service takes the responsibility of taking the decision for processing particular message. If positive dicision taken - just forwarding message to ServiceBus topic.
+
+[TextProcessor](https://github.com/KirillRukasov/memesfinder-textprocessor) - finding key phrases in original message via Azure Congnitive Services.
 
 [ProcessMeme](https://github.com/KirillRukasov/memesfinder-processmeme) - finding proper picture based on the key phrase received from `TextProcessor`. If picture found - replying to original Telegram message with that picture.
+
+[Greeter](https://github.com/KirillRukasov/memesfinder-greeter) - sending welcome message to new chat memebrs
 
 ## Architecture
 
@@ -42,18 +54,30 @@ flowchart TD;
 
 A(TG HTTP IN);
 B(FA: Gateway);
-C(SB: alltgmessages)
-D(FA: TextProcessor)
-E(SB: keywordmessages)
-F(FA: ProcessMeme)
-Z(TG HTTP OUT)
+C(SB: allmessages);
+G(FA: DecisionMaker);
+H(SB: textmessages);
+D(FA: TextProcessor);
+E(SB: keywordmessages);
+F(FA: ProcessMeme);
+I(FA: Orchestrator);
+J(FA: Greeter);
+L(SB: generalmessages);
+Z(TG HTTP OUT);
 
 A -- Update --> B
 B -- Update --> C
-C -- Update --> D
+C -- Update --> I
+I -- MessageWithKeyword --> E
+J -- TextMessage --> Z 
+I -- Update --> L
+L -- Update --> G
+G -- Update --> H
+H -- Update --> D
 D -- MessageWithKeyword --> E
 E -- MessageWithKeyword --> F
 F -- PhotoMessage --> Z
+C -- Update --> J
 ```
 
 Legend:

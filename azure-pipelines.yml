@@ -1,7 +1,15 @@
+resources:
+  repositories:
+  - repository: memesfinder-infrastructure
+    type: github
+    name: ArtemKiyashko/memesfinder-infrastructure
+    endpoint: github.com_ArtemKiyashko
+    
 trigger:
   branches:
     include:
     - master
+    - development
   paths:
     exclude:
     - 'README.md'
@@ -30,7 +38,7 @@ stages:
           deploymentMode: 'Incremental'
 - stage: Production
   dependsOn: Test
-  condition: and(succeeded('Test'), ne(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeeded('Test'), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
    - job: Deploy
      steps:
