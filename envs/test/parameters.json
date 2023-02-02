@@ -131,6 +131,18 @@
                 }
             }
         },
+        "appserviceplan_reporter": {
+            "value": {
+                "name": "aspwetestmemesfinderrprtr",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "functionapp_gateway": {
             "value": {
                 "name": "fawetestmemesfindergateway",
@@ -182,6 +194,21 @@
                     "Приветствуем @{PreferredUsername}\nЯ бот и отвечаю тут за мемасы и некоторые административные рутины. Например, у нас принято представляться всем новеньким и давать краткую информацию о себе. Если вам не комфортно преподносить это на публику, можете поздороваться с админами в личку.\nВ случае молчания более 24 часов, вы вызовете лишнее подозрение к себе. Я тегну админов на всякий случай.\n\nПредставьтесь пожалуйста, откуда Вы? Сколько во Вроцлаве?\n\n#greetings \n\n"
                 ],
                 "greetingsThreadId": [
+                    null
+                ],
+                "chatId": [
+                    -656259341
+                ]
+            }
+        },
+        "functionapp_reporter": {
+            "value": {
+                "name": "fawetestmemesfinderrprtr",
+                "environment": "Test",
+                "bottoken_kvsecretname": "TelegramBotOptions--Token",
+                "workspaceId": "06d33a2e-fbd9-4546-9cb0-df001d1419cf",
+                "weeklyReporterSchedule": "0 0 19 * * 4",
+                "reportsThreadId": [
                     null
                 ],
                 "chatId": [
