@@ -15,6 +15,8 @@ TextProcessor: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFin
 
 ProcessMeme: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/ArtemKiyashko.memesfinder-processmeme?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=11&branchName=master)
 
+Reporter: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-reporter?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=16&branchName=master)
+
 ### Description
 
 This telegram bot is basically listening for the group messages, randomly choosing one of and replying with the picture, related to the one of the key phrase from the original message. Optionally this bot can reply to dedicated request if trained AI model (Azure Cognitive Services/LUIS/etc) recognise specific pattern in income message.
@@ -40,6 +42,8 @@ This project using only SaaS model of Azure resources (nothing for IaaS/PaaS or 
 [ProcessMeme](https://github.com/ArtemKiyashko/memesfinder-processmeme) - finding proper picture based on the key phrase received from `TextProcessor`. If picture found - replying to original Telegram message with that picture.
 
 [Greeter](https://github.com/ArtemKiyashko/memesfinder-greeter) - sending welcome message to new chat memebrs
+
+[Reporter](https://github.com/ArtemKiyashko/memesfinder-reporter) - processing and sending reports to the chat, based on Azure Monitor data collected
 
 ## Architecture
 
