@@ -47,6 +47,9 @@
         "appserviceplan_decisionmaker": {
             "type": "object"
         },
+        "appserviceplan_reporter": {
+            "type": "object"
+        },
         "functionapp_decisionmaker": {
             "type": "object"
         },
@@ -57,6 +60,9 @@
             "type": "object"
         },
         "functionapp_greeter": {
+            "type": "object"
+        },
+        "functionapp_reporter": {
             "type": "object"
         },
         "smartDetectionActionGroup": {
@@ -72,7 +78,8 @@
         "servicebus_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0')]",
         "languageservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7628b7b8-a8b2-4cdc-b46f-e9b35248918e')]",
         "cognitiveservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'a97b65f3-24c7-4388-baec-2e87135dc908')]",
-        "linkToAiResourceSmartRules": "[concat('hidden-link:', resourceId('microsoft.insights/components', parameters('appinsights').name))]"
+        "linkToAiResourceSmartRules": "[concat('hidden-link:', resourceId('microsoft.insights/components', parameters('appinsights').name))]",
+        "monitoringReaderRole": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '43d0d8ad-25c7-4714-9337-8ba259a9fe05')]"
     },
     "resources": [
         {
@@ -592,6 +599,13 @@
                             "secrets": [ "get" ]
                         },
                         "tenantId": "[subscription().tenantId]"
+                    },
+                    {
+                        "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_reporter').name), '2022-03-01', 'Full').identity.principalId]",
+                        "permissions": {
+                            "secrets": [ "get" ]
+                        },
+                        "tenantId": "[subscription().tenantId]"
                     }
                 ]
             },
@@ -964,6 +978,27 @@
             "location": "[variables('rsgLocation')]",
             "tags": "[parameters('defaultTags')]",
             "sku": "[parameters('appserviceplan_greeter').sku]",
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('appserviceplan_reporter').name]",
+            "location": "[variables('rsgLocation')]",
+            "tags": "[parameters('defaultTags')]",
+            "sku": "[parameters('appserviceplan_reporter').sku]",
             "kind": "functionapp",
             "properties": {
                 "perSiteScaling": false,
@@ -1626,6 +1661,129 @@
                 "redundancyMode": "None",
                 "storageAccountRequired": false,
                 "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('functionapp_reporter').name]",
+            "location": "[variables('rsgLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_reporter').name)]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name)]",
+                "[resourceId('microsoft.insights/components', parameters('appinsights').name)]"
+            ],
+            "tags": "[parameters('defaultTags')]",
+            "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appserviceplan_reporter').name)]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": true,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0,
+                    "netFrameworkVersion": "v6.0",
+                    "ftpsState": "Disabled",
+                    "appSettings": 
+                    [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
+                        },
+                        {
+                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                            "value": "[parameters('functionapp_reporter').environment]"
+                        },
+                        {
+                            "name": "TelegramBotOptions__Token",
+                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_reporter').bottoken_kvsecretname,')')]"
+                        },
+                        {
+                            "name": "ReporterOptions__ChatOptions__0__ReportsThreadId",
+                            "value": "[parameters('functionapp_reporter').reportsThreadId[0]]"
+                        },
+                        {
+                            "name": "ReporterOptions__ChatOptions__0__ChatId",
+                            "value": "[parameters('functionapp_reporter').chatId[0]]"
+                        },
+                        {
+                            "name": "ReporterOptions__WorkspaceId",
+                            "value": "[parameters('functionapp_reporter').workspaceId]"
+                        },
+                        {
+                            "name": "WeeklyReporterSchedule",
+                            "value": "[parameters('functionapp_reporter').weeklyReporterSchedule]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(parameters('functionapp_reporter').name)]"
+                        },
+                        {
+                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                            "value": "true"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('loganalyticsworkspace').name, parameters('functionapp_reporter').name, 'reader')]",
+            "scope": "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsworkspace').name)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('loganalyticsworkspace').name)]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_reporter').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('monitoringReaderRole')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_reporter').name), '2022-03-01', 'Full').identity.principalId]"
             }
         },
         {

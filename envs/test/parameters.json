@@ -131,6 +131,18 @@
                 }
             }
         },
+        "appserviceplan_reporter": {
+            "value": {
+                "name": "aspwetestmemesfinderrprtr",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "functionapp_gateway": {
             "value": {
                 "name": "fawetestmemesfindergateway",
@@ -194,6 +206,21 @@
               -656259341
             ]
           }
+        },
+        "functionapp_reporter": {
+            "value": {
+                "name": "fawetestmemesfinderrprtr",
+                "environment": "Test",
+                "bottoken_kvsecretname": "TelegramBotOptions--Token",
+                "workspaceId": "06d33a2e-fbd9-4546-9cb0-df001d1419cf",
+                "weeklyReporterSchedule": "0 0 19 * * 4",
+                "reportsThreadId": [
+                    null
+                ],
+                "chatId": [
+                    -656259341
+                ]
+            }
         },
         "textAnalyticsService": {
             "value": {
