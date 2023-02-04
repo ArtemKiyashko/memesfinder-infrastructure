@@ -191,13 +191,13 @@
             "environment": "Test",
             "bottoken_kvsecretname": "TelegramBotOptions--Token",
             "greetingsRulesLink": [
-              "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.reddit.com%2Fr%2Fhumancrayons%2Fcomments%2Fkwwlmg%2Fno_rules_means_i_can_post_nonoc_memes_right%2F&psig=AOvVaw1a2JHXA9E1NGs6AikEktIQ&ust=1675453429931000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCKiqpMfM9_wCFQAAAAAdAAAAABAE"
+              "https://i.redd.it/i27jxkn5p7b61.jpg"
             ],
             "greetingsSubstituteTextLink": [
               "этом сообщении"
             ],
             "greetingsMarkdownTemplate": [
-              "Приветствуем {PreferredUsername}\nЯ бот и отвечаю тут за мемасы и некоторые административные рутины. Например, у нас принято представляться всем новеньким и давать краткую информацию о себе.\nВ случае молчания более 24 часов, вы вызовете лишнее подозрение к себе. Я тегну админов на всякий случай.\n\nВ этом сообщении собраны правила чата. Соблюдайте их и уважайте других.\n\nПредставьтесь пожалуйста, откуда Вы? Сколько во Вроцлаве?\n\n#greetings \n\n"
+              "Приветствуем {PreferredUsername}\nЯ бот и отвечаю тут за мемасы и некоторые административные рутины. Например, у нас принято представляться всем новеньким и давать краткую информацию о себе.\nВ случае молчания более 24 часов, вы вызовете лишнее подозрение к себе. Я тегну админов на всякий случай.\n\nВ [{SubstituteTextLink}]({RulesLink}) собраны правила чата. Соблюдайте их и уважайте других.\n\nПредставьтесь пожалуйста, откуда Вы? Сколько во Вроцлаве?\n\n#greetings \n\n"
             ],
             "greetingsThreadId": [
               null
