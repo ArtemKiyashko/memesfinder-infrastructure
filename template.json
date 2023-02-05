@@ -1587,69 +1587,72 @@
                     "minimumElasticInstanceCount": 0,
                     "netFrameworkVersion": "v6.0",
                     "ftpsState": "Disabled",
-                    "appSettings": 
-                    [
-                        {
-                            "name": "AzureWebJobsStorage",
-                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
-                        },
-                        {
-                            "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
-                        },
-                        {
-                            "name": "FUNCTIONS_EXTENSION_VERSION",
-                            "value": "~4"
-                        },
-                        {
-                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
-                        },
-                        {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
-                        },
-                        {
-                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
-                            "value": "[parameters('functionapp_greeter').environment]"
-                        },
-                        {
-                            "name": "ServiceBusOptions__FullyQualifiedNamespace",
-                            "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
-                        },
-                        {
-                            "name": "TelegramBotOptions__Token",
-                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_greeter').bottoken_kvsecretname,')')]"
-                        },
-                        {
-                            "name": "GreeterOptions__ChatOptions__0__GreetingsMarkdownTemplate",
-                            "value": "[parameters('functionapp_greeter').greetingsMarkdownTemplate[0]]"
-                        },
-                        {
-                            "name": "GreeterOptions__ChatOptions__0__GreetingsThreadId",
-                            "value": "[parameters('functionapp_greeter').greetingsThreadId[0]]"
-                        },
-                        {
-                            "name": "GreeterOptions__ChatOptions__0__ChatId",
-                            "value": "[parameters('functionapp_greeter').chatId[0]]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTSHARE",
-                            "value": "[toLower(parameters('functionapp_greeter').name)]"
-                        },
-                        {
-                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
-                            "value": "true"
-                        },
-                        {
-                            "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "1"
-                        }
-                    ]
+                  "appSettings": [
+                    {
+                      "name": "AzureWebJobsStorage",
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                    },
+                    {
+                      "name": "FUNCTIONS_WORKER_RUNTIME",
+                      "value": "dotnet"
+                    },
+                    {
+                      "name": "FUNCTIONS_EXTENSION_VERSION",
+                      "value": "~4"
+                    },
+                    {
+                      "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                      "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
+                    },
+                    {
+                      "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                      "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
+                    },
+                    {
+                      "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                      "value": "[parameters('functionapp_greeter').environment]"
+                    },
+                    {
+                      "name": "ServiceBusOptions__FullyQualifiedNamespace",
+                      "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
+                    },
+                    {
+                      "name": "TelegramBotOptions__Token",
+                      "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_greeter').bottoken_kvsecretname,')')]"
+                    },
+                    {
+                      "name": "GreeterOptions__ChatOptions__0__GreetingsRulesLink",
+                      "value": "[parameters('functionapp_greeter').greetingsRulesLink[0]]"
+                    },
+                    {
+                      "name": "GreeterOptions__ChatOptions__0__GreetingsMarkdownTemplate",
+                      "value": "[parameters('functionapp_greeter').greetingsMarkdownTemplate[0]]"
+                    },
+                    {
+                      "name": "GreeterOptions__ChatOptions__0__GreetingsThreadId",
+                      "value": "[parameters('functionapp_greeter').greetingsThreadId[0]]"
+                    },
+                    {
+                      "name": "GreeterOptions__ChatOptions__0__ChatId",
+                      "value": "[parameters('functionapp_greeter').chatId[0]]"
+                    },
+                    {
+                      "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
+                    },
+                    {
+                      "name": "WEBSITE_CONTENTSHARE",
+                      "value": "[toLower(parameters('functionapp_greeter').name)]"
+                    },
+                    {
+                      "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                      "value": "true"
+                    },
+                    {
+                      "name": "WEBSITE_RUN_FROM_PACKAGE",
+                      "value": "1"
+                    }
+                  ]
                 },
                 "scmSiteAlsoStopped": false,
                 "clientAffinityEnabled": false,
