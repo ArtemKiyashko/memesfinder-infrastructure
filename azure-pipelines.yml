@@ -13,7 +13,7 @@ trigger:
   paths:
     exclude:
     - 'README.md'
-    - 'img'
+    - 'img/'
 
 pool:
   vmImage: ubuntu-latest
