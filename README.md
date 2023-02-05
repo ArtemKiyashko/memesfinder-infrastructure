@@ -92,4 +92,4 @@ Legend:
 
 ### Resources to be created by this ARM template
 
-![azure_resources](img/rsgweprivatememesfinder.png)
+![azure_resources](img/template_visualization2.png)
