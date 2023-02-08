@@ -172,7 +172,8 @@
                 "luiStringIndexType": "Utf16CodeUnit",
                 "luiLanguage": "ru",
                 "luiTargetIntent": "MemeRequest",
-                "luiTargetCategory": "MemeKeyPhrase"
+                "luiTargetCategory": "MemeKeyPhrase",
+                "enableAiAnalysis": true
             }
         },
         "functionapp_memeprocessor": {
