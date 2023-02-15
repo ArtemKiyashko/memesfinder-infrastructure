@@ -1625,6 +1625,10 @@
                       "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_greeter').bottoken_kvsecretname,')')]"
                     },
                     {
+                      "name": "GreeterOptions__ChatOptions__0__GreetingsRulesLink",
+                      "value": "[parameters('functionapp_greeter').greetingsRulesLink[0]]"
+                    },
+                    {
                       "name": "GreeterOptions__ChatOptions__0__GreetingsMarkdownTemplate",
                       "value": "[parameters('functionapp_greeter').greetingsMarkdownTemplate[0]]"
                     },
