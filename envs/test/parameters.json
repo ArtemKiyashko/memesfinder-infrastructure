@@ -172,7 +172,8 @@
                 "luiStringIndexType": "Utf16CodeUnit",
                 "luiLanguage": "ru",
                 "luiTargetIntent": "MemeRequest",
-                "luiTargetCategory": "MemeKeyPhrase"
+                "luiTargetCategory": "MemeKeyPhrase",
+                "enableAiAnalysis": true
             }
         },
         "functionapp_memeprocessor": {
@@ -215,7 +216,9 @@
                     null
                 ],
                 "chatId": [
-                    -656259341
+                    -1001825209838,
+                    null,
+                    null
                 ]
             }
         },

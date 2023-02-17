@@ -1417,6 +1417,10 @@
                             "value": "[parameters('functionapp_messageorchestrator').luiTargetCategory]"
                         },
                         {
+                            "name": "ENABLE_AI_ANALYSIS",
+                            "value": "[parameters('functionapp_messageorchestrator').enableAiAnalysis]"
+                        },
+                        {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
                             "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
                         },
@@ -1736,6 +1740,14 @@
                         {
                             "name": "ReporterOptions__ChatOptions__0__ChatId",
                             "value": "[parameters('functionapp_reporter').chatId[0]]"
+                        },
+                        {
+                            "name": "ReporterOptions__ChatOptions__1__ChatId",
+                            "value": "[parameters('functionapp_reporter').chatId[1]]"
+                        },
+                        {
+                            "name": "ReporterOptions__ChatOptions__2__ChatId",
+                            "value": "[parameters('functionapp_reporter').chatId[2]]"
                         },
                         {
                             "name": "ReporterOptions__WorkspaceId",
