@@ -15,6 +15,8 @@ TextProcessor: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFin
 
 ProcessMeme: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/ArtemKiyashko.memesfinder-processmeme?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=11&branchName=master)
 
+Reporter: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_apis/build/status/memesfinder-reporter?branchName=master)](https://dev.azure.com/VostokEngineering/MemesFinder/_build/latest?definitionId=16&branchName=master)
+
 ### Description
 
 This telegram bot is basically listening for the group messages, randomly choosing one of and replying with the picture, related to the one of the key phrase from the original message. Optionally this bot can reply to dedicated request if trained AI model (Azure Cognitive Services/LUIS/etc) recognise specific pattern in income message.
@@ -29,17 +31,19 @@ This project using only SaaS model of Azure resources (nothing for IaaS/PaaS or 
 
 ## Services repositories
 
-[Gateway](https://github.com/KirillRukasov/memesfinder-gateway) - receiving Telegram HTTP updates with messages from chat. 
+[Gateway](https://github.com/ArtemKiyashko/memesfinder-gateway) - receiving Telegram HTTP updates with messages from chat. 
 
-[Orchestrator](https://github.com/KirillRukasov/memesfinder-messageorchestrator) - decides whenever it's a general message and should be processed through the DecisionMaker or dedicated meme request and should response immediately.
+[Orchestrator](https://github.com/ArtemKiyashko/memesfinder-messageorchestrator) - decides whenever it's a general message and should be processed through the DecisionMaker or dedicated meme request and should response immediately.
 
-[DecisionMaker](https://github.com/KirillRukasov/memesfinder-decisionmaker) - this service takes the responsibility of taking the decision for processing particular message. If positive dicision taken - just forwarding message to ServiceBus topic.
+[DecisionMaker](https://github.com/ArtemKiyashko/memesfinder-decisionmaker) - this service takes the responsibility of taking the decision for processing particular message. If positive dicision taken - just forwarding message to ServiceBus topic.
 
-[TextProcessor](https://github.com/KirillRukasov/memesfinder-textprocessor) - finding key phrases in original message via Azure Congnitive Services.
+[TextProcessor](https://github.com/ArtemKiyashko/memesfinder-textprocessor) - finding key phrases in original message via Azure Congnitive Services.
 
-[ProcessMeme](https://github.com/KirillRukasov/memesfinder-processmeme) - finding proper picture based on the key phrase received from `TextProcessor`. If picture found - replying to original Telegram message with that picture.
+[ProcessMeme](https://github.com/ArtemKiyashko/memesfinder-processmeme) - finding proper picture based on the key phrase received from `TextProcessor`. If picture found - replying to original Telegram message with that picture.
 
-[Greeter](https://github.com/KirillRukasov/memesfinder-greeter) - sending welcome message to new chat memebrs
+[Greeter](https://github.com/ArtemKiyashko/memesfinder-greeter) - sending welcome message to new chat memebrs
+
+[Reporter](https://github.com/ArtemKiyashko/memesfinder-reporter) - processing and sending reports to the chat, based on Azure Monitor data collected
 
 ## Architecture
 
