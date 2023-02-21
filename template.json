@@ -1750,6 +1750,10 @@
                             "value": "[parameters('functionapp_reporter').chatId[2]]"
                         },
                         {
+                            "name": "ReporterOptions__ChatOptions__3__ChatId",
+                            "value": "[parameters('functionapp_reporter').chatId[3]]"
+                        },
+                        {
                             "name": "ReporterOptions__WorkspaceId",
                             "value": "[parameters('functionapp_reporter').workspaceId]"
                         },
