@@ -1417,8 +1417,8 @@
                             "value": "[parameters('functionapp_messageorchestrator').luiTargetCategory]"
                         },
                         {
-                            "name": "ENABLE_AI_ANALYSIS",
-                            "value": "[parameters('functionapp_messageorchestrator').enableAiAnalysis]"
+                            "name": "AI_ANALYSIS_MODE",
+                            "value": "0"
                         },
                         {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
