@@ -1073,7 +1073,7 @@
                         },
                         {
                             "name": "ChatWhitelistDecisionMakerOptions__AllowedChatIds",
-                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_gateway').chatswhitelist_kvsecretname,')')]"
+                            "value": "[parameters('functionapp_gateway').allowedChatIds]"
                         },
                         {
                             "name": "ServiceBusOptions__AllMessagesTopic",
