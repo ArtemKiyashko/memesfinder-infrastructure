@@ -147,7 +147,7 @@
             "value": {
                 "name": "faweprivatememesfindergateway",
                 "environment": "Production",
-                "chatswhitelist_kvsecretname": "ChatWhitelistDecisionMakerOptions--AllowedChatIds"
+                "allowedChatIds": null
             }
         },
         "functionapp_textprocessor": {
