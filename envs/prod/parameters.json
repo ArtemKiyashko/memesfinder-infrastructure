@@ -173,7 +173,7 @@
                 "luiLanguage": "ru",
                 "luiTargetIntent": "MemeRequest",
                 "luiTargetCategory": "MemeKeyPhrase",
-                "analysisMode": 0
+                "analysisMode": 1
             }
         },
         "functionapp_memeprocessor": {
@@ -219,7 +219,7 @@
                     -1001729338157,
                     -275479044,
                     -274086213,
-                    -873730118
+                    -1001612080736
                 ]
             }
         },
