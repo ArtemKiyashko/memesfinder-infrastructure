@@ -147,7 +147,7 @@
             "value": {
                 "name": "fawetestmemesfindergateway",
                 "environment": "Test",
-                "chatswhitelist_kvsecretname": "ChatWhitelistDecisionMakerOptions--AllowedChatIds"
+                "allowedChatIds": "2011407542;322053744;-1001825209838"
             }
         },
         "functionapp_textprocessor": {
@@ -173,7 +173,7 @@
                 "luiLanguage": "ru",
                 "luiTargetIntent": "MemeRequest",
                 "luiTargetCategory": "MemeKeyPhrase",
-                "enableAiAnalysis": true
+                "analysisMode": 0
             }
         },
         "functionapp_memeprocessor": {
