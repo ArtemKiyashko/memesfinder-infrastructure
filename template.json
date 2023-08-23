@@ -119,7 +119,7 @@
                     "enableLogAccessUsingOnlyResourcePermissions": true
                 },
                 "workspaceCapping": {
-                    "dailyQuotaGb": -1
+                    "dailyQuotaGb": 1
                 },
                 "publicNetworkAccessForIngestion": "Enabled",
                 "publicNetworkAccessForQuery": "Enabled"
