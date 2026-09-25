@@ -53,7 +53,7 @@ Azure Service Bus as event bus and message broker for communication between serv
 
 ### Current data flow
 
-`textmessages` is the handoff topic for meme-search requests. Both direct requests and messages approved by DecisionMaker are sent there. QueryGenerator consumes its dedicated subscription, creates the search query, and publishes the result to `keywordmessages`. ProcessMeme consumes that result and replies in Telegram.
+`textmessages` is the handoff topic for meme-search requests. MessageOrchestrator uses Azure AI Language Conversation Analysis to decide whether an update is a direct meme request: in Production, `SEMI_MODE` first checks for the word “мем”; in Test, `FULL_MODE` analyzes every valid message. Direct requests and messages approved by DecisionMaker are sent to `textmessages`. QueryGenerator consumes its dedicated subscription, creates the search query, and publishes the result to `keywordmessages`. ProcessMeme consumes that result and replies in Telegram.
 
 ```mermaid
 flowchart TD;
@@ -62,8 +62,11 @@ B -->|Update| C[(allmessages)]
 C -->|Update| O[MessageOrchestrator]
 C -->|Update| G[Greeter]
 G -->|Welcome message| TG[Telegram chat]
-O -->|Direct meme request| T[(textmessages)]
-O -->|General message| GM[(generalmessages)]
+O -->|Production: text contains “мем”| AI[Azure AI Language Conversation Analysis]
+O -->|Production: heuristic does not match| GM[(generalmessages)]
+O -->|Test: FULL_MODE| AI
+AI -->|MemeRequest + MemeKeyPhrase| T
+AI -->|Other intent or no matching entity| GM
 GM -->|Update| D[DecisionMaker]
 D -->|Approved Update| T
 T -->|querygenerator subscription| Q[QueryGenerator / OpenAI]
