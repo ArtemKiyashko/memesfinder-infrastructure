@@ -83,6 +83,18 @@
                 }
             }
         },
+        "appserviceplan_querygenerator": {
+            "value": {
+                "name": "aspwetestmemesfinderquerygen",
+                "sku": {
+                    "name": "Y1",
+                    "tier": "Dynamic",
+                    "size": "Y1",
+                    "family": "Y",
+                    "capacity": 0
+                }
+            }
+        },
         "appserviceplan_decisionmaker": {
             "value": {
                 "name": "aspwetestmemesfinderdmaker",
@@ -154,6 +166,15 @@
             "value": {
                 "name": "fawetestmemesfindertxtproc",
                 "environment": "Test"
+            }
+        },
+        "functionapp_querygenerator": {
+            "value": {
+                "name": "fawetestmemesfinderquerygen",
+                "environment": "Test",
+                "openai_apikey_kvsecretname": "OpenAIOptions--ApiKey",
+                "openai_model": "gpt-4o-mini",
+                "openai_endpoint": "https://api.openai.com/v1/chat/completions"
             }
         },
         "functionapp_decisionmaker": {
