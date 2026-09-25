@@ -19,9 +19,7 @@ Reporter: [![Build Status](https://dev.azure.com/VostokEngineering/MemesFinder/_
 
 ### Description
 
-This telegram bot is basically listening for the group messages, randomly choosing one of and replying with the picture, related to the one of the key phrase from the original message. Optionally this bot can reply to dedicated request if trained AI model (Azure Cognitive Services/LUIS/etc) recognise specific pattern in income message.
-
-As a key phrase extractor and request entity extractor we are using [Azure Cognitive Services](https://azure.microsoft.com/en-us/products/cognitive-services)
+This Telegram bot listens to group messages and can reply with a related picture. Search queries are generated from message text by the QueryGenerator service using the OpenAI API. The bot also supports dedicated meme requests, detected by the MessageOrchestrator's Azure Language conversation analysis.
 
 For picture search we are utilizing [Google Custom Search](https://developers.google.com/custom-search/v1/introduction) and it`s [.NET Client Library](https://developers.google.com/api-client-library/dotnet/apis/customsearch/v1)
 
@@ -37,9 +35,11 @@ This project using only SaaS model of Azure resources (nothing for IaaS/PaaS or 
 
 [DecisionMaker](https://github.com/ArtemKiyashko/memesfinder-decisionmaker) - this service takes the responsibility of taking the decision for processing particular message. If positive dicision taken - just forwarding message to ServiceBus topic.
 
-[TextProcessor](https://github.com/ArtemKiyashko/memesfinder-textprocessor) - finding key phrases in original message via Azure Congnitive Services.
+[QueryGenerator](https://github.com/ArtemKiyashko/memesfinder-querygenerator) - generates a concise image-search query from the Telegram message with the OpenAI API and publishes a `TgMessageModel` to `keywordmessages`.
 
-[ProcessMeme](https://github.com/ArtemKiyashko/memesfinder-processmeme) - finding proper picture based on the key phrase received from `TextProcessor`. If picture found - replying to original Telegram message with that picture.
+[TextProcessor](https://github.com/ArtemKiyashko/memesfinder-textprocessor) - legacy Azure Cognitive Services key-phrase extraction. Its Function is disabled by the ARM template; the Function App and its Service Bus subscription are retained temporarily during the QueryGenerator migration.
+
+[ProcessMeme](https://github.com/ArtemKiyashko/memesfinder-processmeme) - finds a picture using the search query received in `TgMessageModel` from `keywordmessages` and replies to the original Telegram message.
 
 [Greeter](https://github.com/ArtemKiyashko/memesfinder-greeter) - sending welcome message to new chat memebrs
 
@@ -47,48 +47,48 @@ This project using only SaaS model of Azure resources (nothing for IaaS/PaaS or 
 
 ## Architecture
 
-Stateless microservices based on Azure Function Apps with consumption service plan (can be changed in `parameters.json` file).
+Stateless microservices based on Azure Function Apps with consumption service plans (can be changed in `parameters.json` files).
 
 Azure Service Bus as event bus and message broker for communication between services.
 
-### Data flow:
+### Current data flow
+
+`textmessages` is the handoff topic for meme-search requests. Both direct requests and messages approved by DecisionMaker are sent there. QueryGenerator consumes its dedicated subscription, creates the search query, and publishes the result to `keywordmessages`. ProcessMeme consumes that result and replies in Telegram.
 
 ```mermaid
 flowchart TD;
-
-A(TG HTTP IN);
-B(FA: Gateway);
-C(SB: allmessages);
-G(FA: DecisionMaker);
-H(SB: textmessages);
-D(FA: TextProcessor);
-E(SB: keywordmessages);
-F(FA: ProcessMeme);
-I(FA: Orchestrator);
-J(FA: Greeter);
-L(SB: generalmessages);
-Z(TG HTTP OUT);
-
-A -- Update --> B
-B -- Update --> C
-C -- Update --> I
-I -- MessageWithKeyword --> E
-J -- TextMessage --> Z 
-I -- Update --> L
-L -- Update --> G
-G -- Update --> H
-H -- Update --> D
-D -- MessageWithKeyword --> E
-E -- MessageWithKeyword --> F
-F -- PhotoMessage --> Z
-C -- Update --> J
+A[Telegram update] -->|Update| B[Gateway]
+B -->|Update| C[(allmessages)]
+C -->|Update| O[MessageOrchestrator]
+C -->|Update| G[Greeter]
+G -->|Welcome message| TG[Telegram chat]
+O -->|Direct meme request| T[(textmessages)]
+O -->|General message| GM[(generalmessages)]
+GM -->|Update| D[DecisionMaker]
+D -->|Approved Update| T
+T -->|querygenerator subscription| Q[QueryGenerator / OpenAI]
+Q -->|TgMessageModel: original message + search query| K[(keywordmessages)]
+K -->|memeprocessor subscription| P[ProcessMeme]
+P -->|Photo reply| TG
+T -.->|textprocessor subscription; legacy Function disabled| L[TextProcessor / Azure AI Language]
+L -.->|Legacy output path| K
+classDef legacy fill:#f5f5f5,stroke:#888,stroke-dasharray: 5 5,color:#666;
+class L legacy;
 ```
 
 Legend:
  - `FA` - Azure Function App
  - `SB` - ServiceBus topic
  - `Update` - incoming Telegram message from chat
- - `MessageWithKeyword` - composite model including original Telegram message model and key phrase
+ - `TgMessageModel` - original Telegram `Message` plus the generated image-search query
+
+### Migration status and remaining legacy
+
+- **QueryGenerator is the active search-query generation path.** It consumes `textmessages/querygenerator` and publishes to `keywordmessages`.
+- **TextProcessor is legacy and disabled** in the ARM template with `AzureWebJobs.MemesFinderTextProcessor.Disabled=true`. Its Function App, `textmessages/textprocessor` subscription, related role assignments, and Cognitive Services resources are still defined in infrastructure and remain cleanup candidates after production verification. Since the subscription still exists, it can accumulate messages until it is removed or expires them.
+- **MessageOrchestrator still uses Azure AI Language Conversations** to recognize dedicated/direct meme requests. This is request detection, not the old search-keyphrase generation path, and is intentionally retained for now.
+- **ProcessMeme remains active and unchanged** as the consumer of `keywordmessages`; Google Custom Search and Telegram delivery still use the generated query.
+- **Runtime modernization remains separate work:** QueryGenerator targets .NET 10 isolated; the existing Function Apps have not yet all been migrated from in-process/.NET 6. That migration was postponed.
 
 ### Resources to be created by this ARM template
 

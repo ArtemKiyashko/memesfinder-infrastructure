@@ -1446,6 +1446,10 @@
                             "value": "generalmessages"
                         },
                         {
+                            "name": "ServiceBusOptions__TextMessagesTopic",
+                            "value": "textmessages"
+                        },
+                        {
                             "name": "ServiceBusOptions__KeywordMessagesTopic",
                             "value": "keywordmessages"
                         },
