@@ -173,8 +173,7 @@
                 "name": "faweprivatememesfinderquerygen",
                 "environment": "Production",
                 "openai_apikey_kvsecretname": "OpenAIOptions--ApiKey",
-                "openai_model": "gpt-4o-mini",
-                "openai_endpoint": "https://api.openai.com/v1/chat/completions"
+                "openai_model": "gpt-4o-mini"
             }
         },
         "functionapp_decisionmaker": {

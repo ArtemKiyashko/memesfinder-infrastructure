@@ -1589,10 +1589,6 @@
                             "value": "keywordmessages"
                         },
                         {
-                            "name": "OpenAIOptions__Endpoint",
-                            "value": "[parameters('functionapp_querygenerator').openai_endpoint]"
-                        },
-                        {
                             "name": "OpenAIOptions__Model",
                             "value": "[parameters('functionapp_querygenerator').openai_model]"
                         },
