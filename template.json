@@ -1237,6 +1237,10 @@
                             "value": "keywordmessages"
                         },
                         {
+                            "name": "ServiceBusOptions__TextMessagesTopic",
+                            "value": "textmessages"
+                        },
+                        {
                             "name": "ServiceBusOptions__FullyQualifiedNamespace",
                             "value": "[concat(parameters('servicebus').name, '.servicebus.windows.net')]"
                         },
@@ -2142,6 +2146,20 @@
             "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/generalmessages')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'generalmessages')]",
+                "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('servicebus_sender_role')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name), '2022-03-01', 'Full').identity.principalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('servicebus').name, 'textmessages', parameters('functionapp_messageorchestrator').name, 'sender')]",
+            "scope": "[concat('Microsoft.ServiceBus/namespaces/', parameters('servicebus').name, '/topics/textmessages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('servicebus').name, 'textmessages')]",
                 "[resourceId('Microsoft.Web/sites', parameters('functionapp_messageorchestrator').name)]"
             ],
             "properties": {
