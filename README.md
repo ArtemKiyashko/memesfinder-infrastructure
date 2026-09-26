@@ -91,7 +91,7 @@ Legend:
 - **TextProcessor is legacy and disabled** in the ARM template with `AzureWebJobs.MemesFinderTextProcessor.Disabled=true`. Its Function App, `textmessages/textprocessor` subscription, related role assignments, and Cognitive Services resources are still defined in infrastructure and remain cleanup candidates after production verification. Since the subscription still exists, it can accumulate messages until it is removed or expires them.
 - **MessageOrchestrator still uses Azure AI Language Conversations** to recognize dedicated/direct meme requests. This is request detection, not the old search-keyphrase generation path, and is intentionally retained for now.
 - **ProcessMeme remains active and unchanged** as the consumer of `keywordmessages`; Google Custom Search and Telegram delivery still use the generated query.
-- **Runtime modernization remains separate work:** QueryGenerator targets .NET 10 isolated; the existing Function Apps have not yet all been migrated from in-process/.NET 6. That migration was postponed.
+- **Function runtime:** all Function Apps target .NET 10 isolated workers. Shared domain, model, and manager libraries may target compatible earlier TFMs where no Functions host/runtime is involved.
 
 ### Resources to be created by this ARM template
 

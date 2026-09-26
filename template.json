@@ -1101,7 +1101,7 @@
                     "http20Enabled": true,
                     "functionAppScaleLimit": 200,
                     "minimumElasticInstanceCount": 0,
-                    "netFrameworkVersion": "v6.0",
+                    "netFrameworkVersion": "v10.0",
                     "ftpsState": "Disabled",
                     "appSettings": [
                         {
@@ -1110,7 +1110,11 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
+                            "value": "dotnet-isolated"
+                        },
+                        {
+                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                            "value": "1"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -1201,7 +1205,7 @@
                     "http20Enabled": true,
                     "functionAppScaleLimit": 200,
                     "minimumElasticInstanceCount": 0,
-                    "netFrameworkVersion": "v6.0",
+                    "netFrameworkVersion": "v10.0",
                     "ftpsState": "Disabled",
                     "appSettings": [
                         {
@@ -1210,7 +1214,11 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
+                            "value": "dotnet-isolated"
+                        },
+                        {
+                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                            "value": "1"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -1313,7 +1321,7 @@
                     "http20Enabled": true,
                     "functionAppScaleLimit": 200,
                     "minimumElasticInstanceCount": 0,
-                    "netFrameworkVersion": "v6.0",
+                    "netFrameworkVersion": "v10.0",
                     "ftpsState": "Disabled",
                     "appSettings": [
                         {
@@ -1322,7 +1330,11 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
+                            "value": "dotnet-isolated"
+                        },
+                        {
+                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                            "value": "1"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -1414,7 +1426,7 @@
                     "http20Enabled": true,
                     "functionAppScaleLimit": 200,
                     "minimumElasticInstanceCount": 0,
-                    "netFrameworkVersion": "v6.0",
+                    "netFrameworkVersion": "v10.0",
                     "ftpsState": "Disabled",
                     "appSettings": [
                         {
@@ -1423,7 +1435,11 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
+                            "value": "dotnet-isolated"
+                        },
+                        {
+                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                            "value": "1"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -1661,7 +1677,7 @@
                     "http20Enabled": true,
                     "functionAppScaleLimit": 200,
                     "minimumElasticInstanceCount": 0,
-                    "netFrameworkVersion": "v6.0",
+                    "netFrameworkVersion": "v10.0",
                     "ftpsState": "Disabled",
                     "appSettings": [
                         {
@@ -1670,7 +1686,11 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
+                            "value": "dotnet-isolated"
+                        },
+                        {
+                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                            "value": "1"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -1769,7 +1789,7 @@
                     "http20Enabled": true,
                     "functionAppScaleLimit": 200,
                     "minimumElasticInstanceCount": 0,
-                    "netFrameworkVersion": "v6.0",
+                    "netFrameworkVersion": "v10.0",
                     "ftpsState": "Disabled",
                   "appSettings": [
                     {
@@ -1778,7 +1798,11 @@
                     },
                     {
                       "name": "FUNCTIONS_WORKER_RUNTIME",
-                      "value": "dotnet"
+                                            "value": "dotnet-isolated"
+                                        },
+                                        {
+                                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                                            "value": "1"
                     },
                     {
                       "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -1881,7 +1905,7 @@
                     "http20Enabled": true,
                     "functionAppScaleLimit": 200,
                     "minimumElasticInstanceCount": 0,
-                    "netFrameworkVersion": "v6.0",
+                    "netFrameworkVersion": "v10.0",
                     "ftpsState": "Disabled",
                     "appSettings": 
                     [
@@ -1891,7 +1915,11 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
+                            "value": "dotnet-isolated"
+                        },
+                        {
+                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                            "value": "1"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
