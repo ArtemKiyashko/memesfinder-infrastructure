@@ -1422,6 +1422,10 @@
                             "value": "[parameters('functionapp_querygenerator').openai_model]"
                         },
                         {
+                            "name": "QueryGenerationOptions__FidelityLevel",
+                            "value": "[string(parameters('functionapp_querygenerator').query_fidelity_level)]"
+                        },
+                        {
                             "name": "OpenAIOptions__ApiKey",
                             "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_querygenerator').openai_apikey_kvsecretname,')')]"
                         },
