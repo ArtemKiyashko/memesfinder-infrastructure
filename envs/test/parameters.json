@@ -8,14 +8,6 @@
                 "project": "memesfinder"
             }
         },
-        "cognitiveservices": {
-            "value": {
-                "name": "cswetestmemesfinder",
-                "sku": {
-                    "name": "S0"
-                }
-            }
-        },
         "loganalyticsworkspace": {
             "value": {
                 "name": "lawetestmemesfinder"
@@ -62,18 +54,6 @@
         "appserviceplan_gateway": {
             "value": {
                 "name": "aspwetestmemesfindergateway",
-                "sku": {
-                    "name": "Y1",
-                    "tier": "Dynamic",
-                    "size": "Y1",
-                    "family": "Y",
-                    "capacity": 0
-                }
-            }
-        },
-        "appserviceplan_textprocessor": {
-            "value": {
-                "name": "aspwetestmemesfindertxtproc",
                 "sku": {
                     "name": "Y1",
                     "tier": "Dynamic",
@@ -160,12 +140,6 @@
                 "name": "fawetestmemesfindergateway",
                 "environment": "Test",
                 "allowedChatIds": "2011407542;322053744;-1001825209838"
-            }
-        },
-        "functionapp_textprocessor": {
-            "value": {
-                "name": "fawetestmemesfindertxtproc",
-                "environment": "Test"
             }
         },
         "functionapp_querygenerator": {

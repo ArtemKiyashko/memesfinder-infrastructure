@@ -8,14 +8,6 @@
                 "project": "memesfinder"
             }
         },
-        "cognitiveservices": {
-            "value": {
-                "name": "csweprivatememesfinder",
-                "sku": {
-                    "name": "S0"
-                }
-            }
-        },
         "loganalyticsworkspace": {
             "value": {
                 "name": "laweprivatememesfinder"
@@ -62,18 +54,6 @@
         "appserviceplan_gateway": {
             "value": {
                 "name": "aspweprivatememesfindergateway",
-                "sku": {
-                    "name": "Y1",
-                    "tier": "Dynamic",
-                    "size": "Y1",
-                    "family": "Y",
-                    "capacity": 0
-                }
-            }
-        },
-        "appserviceplan_textprocessor": {
-            "value": {
-                "name": "aspweprivatememesfindertxtproc",
                 "sku": {
                     "name": "Y1",
                     "tier": "Dynamic",
@@ -160,12 +140,6 @@
                 "name": "faweprivatememesfindergateway",
                 "environment": "Production",
                 "allowedChatIds": null
-            }
-        },
-        "functionapp_textprocessor": {
-            "value": {
-                "name": "faweprivatememesfindertxtproc",
-                "environment": "Production"
             }
         },
         "functionapp_querygenerator": {
