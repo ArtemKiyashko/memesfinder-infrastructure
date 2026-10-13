@@ -207,14 +207,9 @@
                 "bottoken_kvsecretname": "TelegramBotOptions--Token",
                 "workspaceId": "06d33a2e-fbd9-4546-9cb0-df001d1419cf",
                 "weeklyReporterSchedule": "0 0 19 * * 4",
-                "reportsThreadId": [
-                    null
-                ],
+                "reportsThreadId": [],
                 "chatId": [
-                    -1001825209838,
-                    null,
-                    null,
-                    null
+                    -1001825209838
                 ]
             }
         },

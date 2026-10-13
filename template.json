@@ -75,7 +75,67 @@
         "servicebus_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0')]",
         "cognitiveservices_reader_role": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'a97b65f3-24c7-4388-baec-2e87135dc908')]",
         "linkToAiResourceSmartRules": "[concat('hidden-link:', resourceId('microsoft.insights/components', parameters('appinsights').name))]",
-        "monitoringReaderRole": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '43d0d8ad-25c7-4714-9337-8ba259a9fe05')]"
+        "monitoringReaderRole": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '43d0d8ad-25c7-4714-9337-8ba259a9fe05')]",
+        "reporterBaseAppSettings": [
+            {
+                "name": "FUNCTIONS_WORKER_RUNTIME",
+                "value": "dotnet-isolated"
+            },
+            {
+                "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                "value": "1"
+            },
+            {
+                "name": "FUNCTIONS_EXTENSION_VERSION",
+                "value": "~4"
+            },
+            {
+                "name": "AZURE_FUNCTIONS_ENVIRONMENT",
+                "value": "[parameters('functionapp_reporter').environment]"
+            },
+            {
+                "name": "TelegramBotOptions__Token",
+                "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_reporter').bottoken_kvsecretname,')')]"
+            },
+            {
+                "name": "ReporterOptions__WorkspaceId",
+                "value": "[parameters('functionapp_reporter').workspaceId]"
+            },
+            {
+                "name": "WeeklyReporterSchedule",
+                "value": "[parameters('functionapp_reporter').weeklyReporterSchedule]"
+            },
+            {
+                "name": "WEBSITE_CONTENTSHARE",
+                "value": "[toLower(parameters('functionapp_reporter').name)]"
+            },
+            {
+                "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                "value": "true"
+            },
+            {
+                "name": "WEBSITE_RUN_FROM_PACKAGE",
+                "value": "1"
+            }
+        ],
+        "copy": [
+            {
+                "name": "reporterChatIdAppSettings",
+                "count": "[length(parameters('functionapp_reporter').chatId)]",
+                "input": {
+                    "name": "[format('ReporterOptions__ChatOptions__{0}__ChatId', copyIndex('reporterChatIdAppSettings'))]",
+                    "value": "[string(parameters('functionapp_reporter').chatId[copyIndex('reporterChatIdAppSettings')])]"
+                }
+            },
+            {
+                "name": "reporterThreadIdAppSettings",
+                "count": "[length(parameters('functionapp_reporter').reportsThreadId)]",
+                "input": {
+                    "name": "[format('ReporterOptions__ChatOptions__{0}__ReportsThreadId', copyIndex('reporterThreadIdAppSettings'))]",
+                    "value": "[string(parameters('functionapp_reporter').reportsThreadId[copyIndex('reporterThreadIdAppSettings')])]"
+                }
+            }
+        ]
     },
     "resources": [
         {
@@ -1720,85 +1780,7 @@
                     "minimumElasticInstanceCount": 0,
                     "netFrameworkVersion": "v10.0",
                     "ftpsState": "Disabled",
-                    "appSettings": 
-                    [
-                        {
-                            "name": "AzureWebJobsStorage",
-                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
-                        },
-                        {
-                            "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet-isolated"
-                        },
-                        {
-                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
-                            "value": "1"
-                        },
-                        {
-                            "name": "FUNCTIONS_EXTENSION_VERSION",
-                            "value": "~4"
-                        },
-                        {
-                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey]"
-                        },
-                        {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString]"
-                        },
-                        {
-                            "name": "AZURE_FUNCTIONS_ENVIRONMENT",
-                            "value": "[parameters('functionapp_reporter').environment]"
-                        },
-                        {
-                            "name": "TelegramBotOptions__Token",
-                            "value": "[concat('@Microsoft.KeyVault(VaultName=', parameters('keyvault').name, ';SecretName=', parameters('functionapp_reporter').bottoken_kvsecretname,')')]"
-                        },
-                        {
-                            "name": "ReporterOptions__ChatOptions__0__ReportsThreadId",
-                            "value": "[parameters('functionapp_reporter').reportsThreadId[0]]"
-                        },
-                        {
-                            "name": "ReporterOptions__ChatOptions__0__ChatId",
-                            "value": "[parameters('functionapp_reporter').chatId[0]]"
-                        },
-                        {
-                            "name": "ReporterOptions__ChatOptions__1__ChatId",
-                            "value": "[parameters('functionapp_reporter').chatId[1]]"
-                        },
-                        {
-                            "name": "ReporterOptions__ChatOptions__2__ChatId",
-                            "value": "[parameters('functionapp_reporter').chatId[2]]"
-                        },
-                        {
-                            "name": "ReporterOptions__ChatOptions__3__ChatId",
-                            "value": "[parameters('functionapp_reporter').chatId[3]]"
-                        },
-                        {
-                            "name": "ReporterOptions__WorkspaceId",
-                            "value": "[parameters('functionapp_reporter').workspaceId]"
-                        },
-                        {
-                            "name": "WeeklyReporterSchedule",
-                            "value": "[parameters('functionapp_reporter').weeklyReporterSchedule]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTSHARE",
-                            "value": "[toLower(parameters('functionapp_reporter').name)]"
-                        },
-                        {
-                            "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
-                            "value": "true"
-                        },
-                        {
-                            "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "1"
-                        }
-                    ]
+                    "appSettings": "[concat(variables('reporterBaseAppSettings'), createArray(createObject('name', 'AzureWebJobsStorage', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value)), createObject('name', 'APPINSIGHTS_INSTRUMENTATIONKEY', 'value', reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').InstrumentationKey), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Insights/components', parameters('appinsights').name), '2020-02-02').ConnectionString), createObject('name', 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageaccount').name, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount').name), '2021-09-01').keys[0].value))), variables('reporterChatIdAppSettings'), variables('reporterThreadIdAppSettings'))]"
                 },
                 "scmSiteAlsoStopped": false,
                 "clientAffinityEnabled": false,
